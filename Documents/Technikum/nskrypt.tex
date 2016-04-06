@@ -842,14 +842,15 @@ UUID=b49ea59b-ce0c-4a72-8b76-36f68783a733 /backup_160	ext3	errors=remount-ro 0  
 #20 11 * * 1-5 tar -zcf /backup_160/home1.tgz /home/ &2 >> /backup_160/bledy_backup1
 0 17 * * 1-5 /sbin/shutdown -h now
 \end{verbatim}
-\subsection{The difference between “s” and “S” in ls -la}
+\subsection{The difference between “s” and “S” in \textit{ls -la}}
 
 
-The documentation of the ls command answers these questions. On most unix variants, look up the ls man page (man ls or online). On Linux, look up the Info documentation (info ls) or online.
+The documentation of the \textit{ls} command answers these questions. On most unix variants, look up the ls man page (man ls or online). On Linux, look up the Info documentation (info ls) or online.
 
 The letter s denotes that the setuid (or setgid, depending on the column) bit is set. When an executable is setuid, it runs as the user who owns the executable file instead of the user who invoked the program. The letter s replaces the letter x. It's possible for a file to be setuid but not executable; this is denoted by S, where the capital S alerts you that this setting is probably wrong because the setuid bit is (almost always) useless if the file is not executable.
 
 The number after the permissions is the hard link count. A hard link is a path to a file (a name, in other words). Most files have a single path, but you can make more with the ln command. (This is different from symbolic links: a symbolic link says “oh, actually, this file is elsewhere, go to <location>”.) Directories have N+2 hard links where N is the number of subdirectories, because they can be accessed from their parent, from themselves (through the . entry), and from each subdirectory (through the .. entry).
+
 \footnote{http://unix.stackexchange.com/questions/28363/whats-the-difference-between-s-and-s-in-ls-la}
 \subsection{Reset hasła roota}
  Method 1
@@ -859,13 +860,11 @@ The number after the permissions is the hard link count. A hard link is a path t
 \item{Scroll down to the kernel line, it starts with "linux /boot/vmlinuz-2.6……."}
 \item{Scroll to the end of that line and press space key once and type \textbf{init=/bin/bash}}
 \item{Press Ctrl X to boot}
-\end{enumerate}
 %# Remount / as Read/Write 
 %mount -rw -o remount /
- 
 \item{Change password with \textbf{passwd}}
- 
 \item{type new password, confirm and hit enter and then reboot.}
+\end{enumerate}
 \subsection{Czyszczenie Master Boot Record}
 A master boot record (MBR) is the 512-byte boot sector that is the first sector of a partitioned data storage device of a hard disk.\newline
 Understanding MBR size\newline
@@ -900,6 +899,12 @@ Where,\newline
 
  bs=446 - Read from /dev/zero and write to /dev/sdc up to 446 BYTES bytes at a time.\newline
 
+\subsection{Usunięty katalog domowy}
+W środowisku graficznym \textbf{Gnome} zdarza się (raczej złośliwe) usunięcie domyślnych katalogów: \textit{Home Folder, Desktop, Documents, Pictures, Downloads}. Skutkiem jest niemożność zalogowania się do środowiska graficznego i dla większości użytkowników oznacza to katastrofę. Jest łatwa metoda odbudowania tych katalogów:
+\begin{verbatim}
+# mkhomedir_helper username
+\end{verbatim}
+Aby zadziałało katalog \textit{/home/username nie może istnieć}.
 
 \footnote{https://www.debian.org/releases/stable/amd64/ch06s03.html.en\#network-console}
 \section{Dużo pomocy}
