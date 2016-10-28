@@ -526,13 +526,28 @@ Patrz \url{http://www.nfire.eu/?m=articles&article_id=43} Dużo o \textit{sed} i
 Tutaj omówię na przykładach kilka fantastycznych narzędzi, które okażą się przydatne w tych momentach w życiu gdy czas nagli bo ''już miało być zrobione ...''
 \subsection{tr}
 Program ten tłumaczy (przetwarza) i usuwa znaki czytane ze \textit{sdtin} na \textit{stdout}. Np. aby usunąć częstą zmorę redaktora -- wielokrotne spacje -- korzystamy z opcji \textbf{-s} \textit{ang. -s, --squeeze-repeats} co zastępuje każdy wielokrotny znak na jeden. Np. jeśli ktoś podrzuci nam tabelę z kolumnami rozdzielanymi spacjami w różnych ilościach (tak bywa!) możemy spróbować: \textbf{cat tabela.txt | tr -s ' ' | cut -d ' ' -f 4}
+\subsubsection{Zamiana ''\n'' na spację}
+\begin{verbatim}
+tr '\n' ' ' < input_filename
+\end{verbatim}
+or remove the newline characters entirely:
+\begin{verbatim}
+tr --delete '\n' < input.txt > output.txt
+\end{verbatim}
 \subsection{sed}
 Sed przedstawia się jako edytor wsadowy do podstawowych przekształceń tekstu pochodzącego z pliku lub potoku. Główna różnica pomiędzy Sed a innym edytorem polega na jednorazowym przebiegu Sed'a przez plik (potok) i na możliwości filtrowania tekstu w potoku.
 \subsubsection{Zamiana ''\_'' na spację}
 \begin{verbatim}
 cat spreadsheet\_test\_answer\_random \textbar sed 's// /g' \textbar pr -T3 > 3Tab_right
 \end{verbatim}
-Powyższa komenda zamieni podkreślenia na spacje, ułoży w 3-ch kolumnach i zapisze do pliku.
+\subsubsection{Zamiana ''\n'' na spację}  \footnote{\url{http://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed}}
+Powyższa komenda zamieni 'newline' na spacje. Wyjaśnienie:
+\begin enumerate
+{\item}Create a label via :a.
+{\item}Append the current and next line to the pattern space via N.
+{\item}If we are before the last line, branch to the created label $!ba ($! means not to do it on the last line as there should be one final newline).
+{\item}Finally the substitution replaces every newline with a space on the pattern space (which is the whole file).
+\end{enumerate}
 \subsection{Tekst w kolumnach}
 
 \begin{verbatim}
@@ -786,9 +801,31 @@ localhost [127.0.0.1] 22 (ssh) open
 \end{verbatim}
 Jak widać otwarte są porty dla: Simple Mail Transfer Protocol (SMTP) do przesyłania poczty elektronicznej, The Internet Printing Protocol (IPP), internetowy protokół do komunikacji między klientem a print serverem; pozwala klientom wysyłać jeden lub wiele zleceń druku  do serwera i wykonywać zadania administracyjne jak: odpytanie ststusu drukarki, statusu zleconych wydruków, usuwania zleceń wydruku; i tajemniczy \texttt{sunrpc} port 111, za którym chowa się RCP.* Jest definiowany jako ''converts RPC program numbers into universal addresses''. \footnote{\url{http://www.tldp.org/LDP/nag/node128.html}}
 
+\subsection{CUPS -- Common Unix Printing System}
+Modularny system druku dla Unix-like systemów operacyjnych, który pozwala stacji stać się serverem wydruku. Na wszystkich systemach CUPS-em zarządza się poprzez przeglądarkę na porcie 631 (np. \textit{http://localhost:631})\footnote{\url{https://en.wikipedia.org/wiki/CUPS}}.
+\subsection{LDAP -- Lightweight Directory Access Protocol}
+\url{http://www.tldp.org/HOWTO/LDAP-HOWTO/}
+\url{https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-a-basic-ldap-server-on-an-ubuntu-12-04-vps}
+\subsection{Avahi -- free zero-configuration networking (zeroconf) implementation}
+\url{https://en.wikipedia.org/wiki/Avahi_(software)}
 
-CUPS (Common Unix Printing System) -- modularny system druku dla Unix-like systemów operacyjnych, który pozwala stacji stać się serverem wydruku. Na wszystkich systemach CUPS-em zarządza się poprzez przeglądarkę na porcie 631 (np. \textit{http://localhost:631})\footnote{\url{https://en.wikipedia.org/wiki/CUPS}}.
 \section{Zmory admina}
+\subsection{Zbędne usługi są zbędne}
+\url{http://www.linuxbrigade.com/turn-off-unneeded-services-on-your-linux-machine/}
+\subsection{praca z \textbf{Git} (GitHub)}
+Gigantyczne repozytorium.
+\begin{verbatim}
+ 1999  git init
+ 2006  git config --global user.email "zs37bojanowski@gmail.com"
+ 2007  git config --global user.name "zs37bojanowski"
+ 2009  git remote add origin https://github.com/zs37bojanowski/nskrypt.git
+ 2015  git commit -m "add ~/Documents/Technikum/nskrypt.tex"
+ 2016  git add ~/Documents/Technikum/nskrypt.tex
+ 2017  git commit -m "add ~/Documents/Technikum/nskrypt.tex"
+ 2018  git push -u origin master
+\end{verbatim}
+\subsection{Antywirus ClamAV}
+Przekoania o dużej odoorności systemu na złośliwe oprogramowanie wynikają przede wszystkim z jego otwartości i możliwości weryfikacji podejrzanego kodu przez każdego. Istnieją oczywiście także programy takie jak ClamAV \url{www.clamav.net}. Dobra dokumentacja w stylu 'howto' jest tutaj: \url{http://askubuntu.com/questions/250290/how-do-i-scan-for-viruses-with-clamav}. Dokładniejsza tutaj: \url{http://linux.die.net/man/1/clamscan} lub tutaj: \url{https://wiki.archlinux.org/index.php/ClamAV}; przykład z \textit{cron}: \url{https://raymii.org/s/tutorials/ClamAV.html}; przykład z raportowaniem: \url{https://www.howtoforge.com/tutorial/configure-clamav-to-scan-and-notify-virus-and-malware/}. Also interesting: \url{http://www.digitalsanctuary.com/tech-blog/debian/automated-clamav-virus-scanning.html}
 \subsection{Kto jest kim: The Four Different Schemes for Persistent Naming}
 Persistent device naming for block devices has been made possible by the introduction of udev and has some advantages over the use of traditional bus-based names such as \texttt{/dev/hda1} or \texttt{/dev/sda2}.
 
@@ -835,6 +872,13 @@ UUID=fe3eddfe-f70c-4d0a-895b-a66ecf98127e none            swap    sw            
 UUID=b49ea59b-ce0c-4a72-8b76-36f68783a733 /backup_160	ext3	errors=remount-ro 0       1
 
 \end{verbatim}
+
+\item{klonowanie z serwera ssh}
+Klonowanie jest mozliwe także po sieci. Jeśli do serwera ssh mamy podłączony dysk wzorcowy lub mamy na nim \textit{image} to możemy klonować  ten zasób z serwera tak (przykład bez \textit{gzip}):
+\begin{verbatim}
+ssh root@ipserver "dd if=/dev/sdc" | pv | of=/dev/sda bs=65536
+\end{verbatim}
+Opcję \textbf{pv} można pominąć -- wskazuje ona postęp klonowania (\textit{Monitor progress of data sent via a pipe})\footnote{http://www.cyberciti.biz/open-source/command-line-hacks/pv-command-examples/}.
 \item{Edycja \textbf{crontab}}
 \begin{verbatim}
 # m h  dom mon dow   command
@@ -842,6 +886,9 @@ UUID=b49ea59b-ce0c-4a72-8b76-36f68783a733 /backup_160	ext3	errors=remount-ro 0  
 #20 11 * * 1-5 tar -zcf /backup_160/home1.tgz /home/ &2 >> /backup_160/bledy_backup1
 0 17 * * 1-5 /sbin/shutdown -h now
 \end{verbatim}
+
+
+
 \subsection{The difference between “s” and “S” in \textit{ls -la}}
 
 
@@ -941,4 +988,18 @@ xserver-xorg-video-intel#lub inne np. ati ...
 \subsection{Zmiana domyślnego menadzera okien}
 X Window System jest uruchamiany poleceniem \texttt{startx} gdzie umieszczone są zmienne, wykonywane ewentualne zadania właściwe danemu systemowi i wywołany zostaje \texttt{xinit}. Przyjrzyjmy się zatem jego zawartości.
 \footnote{\url{http://xwinman.org/basics.php}}
+\section{Hardware}
+Aby dowiedzieć się na czym pracujemy: typ procesora itp.: \url{http://www.binarytides.com/linux-cpu-information/}, pamięć: \url{http://www.binarytides.com/linux-command-check-memory-usage/}, typ systemu: \url{https://linuxconfig.org/check-what-debian-version-you-are-running-on-your-linux-system}, architektura: \url{http://www.howtogeek.com/198615/how-to-check-if-your-linux-system-is-32-bit-or-64-bit/}.
+\section{VNC}
+\subsection{serwer}
+\begin{verbatim}
+   54  apt-get install vnc4server
+   55  vnc4password
+   56  vnc4passwd
+   57  vnc4server -geometry 800x600 -depth 24
+\end{verbatim}
+\subsection{klient}
+\begin{verbatim}
+xvnc4viewer 192.168.0.22:1
+\end{verbatim}
 \end{document}
