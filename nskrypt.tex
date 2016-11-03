@@ -1,0 +1,1043 @@
+%% -*- coding: utf-8 -*-
+\documentclass[a4paper,titlepage,12pt]{mwart}
+\setlength{\textheight}{22cm}
+\setlength{\textwidth}{18cm}
+\setlength{\oddsidemargin}{0.1cm}
+\setlength{\evensidemargin}{0.1cm}
+\usepackage[english,polish]{babel}
+\usepackage[OT1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{iwona}
+\usepackage{polski}
+\frenchspacing
+\usepackage{indentfirst}
+\title{\textsc{\huge{NSkrypt PSO/PSK}}}
+\author{Adam Bojanowski}
+\date{15 stycznia 2015}
+%\selectlanguage{english}
+\usepackage[polish]{babel}
+%\usepackage[OT4]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage{iwona}
+%\usepackage{polski}
+%\usepackage{hyperref}
+\usepackage{paralist}
+\pagestyle{headings}%{empty}
+\usepackage[breaklinks]{hyperref}
+\AtBeginDocument{\let\textlabel\label}
+\begin{document}
+%\textbf{biblia:}
+%\url{http://tldp.org/LDP/intro-linux/html/}\newline
+%\url{http://www.tldp.org/LDP/Bash-Beginners-Guide/html/Bash-Beginners-Guide.html}
+\section{Czym jest Linux}
+
+To czym jest zależne jest od kontekstu\footnote{\url{https://content.netdevgroup.com/contents/linux-essentials/1/}}. W zasadzie Linux to jądro (kernel), które kontroluje wszystkie zadania podejmowane przez system. Jeśli mówimy, że komputer pracuje pod kontrolą Linux, myślimy o jądrze i zestawie narzędzi, które są do niego dodane i~taki zestaw jest nazywany dystrybucją. Z kolei ''znajomość Linuxa'' oznacza zwykle umiejętność korzystania z narzędzi, choć może także odnosić się do wiedzy o dostrajaniu jądra.
+\section{Czym jest Unix}
+UNIX to system operacyjny stworzony w AT\&T Bell Labs w latach 1970-tych. Modyfikowany i~forkowany (!) (ang. forked\footnote{that is, people modified it and those modifications served as the basis for other systems} także dziś jest wiele jego wariantów. Jednak UNIX jest znakiem towarowym i~posiada określoną specyfikację, która nelaży do konsorcjum Open Group. Zatem tylko certyfikowane przez OG oprogramowanie może być nazywane UNIX. Pomimo że Linux spełnia wszystkie wymagania specyfikacji UNIX, nie jest certyfikowany zatem nie jest naprawdę UNIX. Jest UNIX-like.
+\section{Programy (aplikacje)}
+Applications
+Like an air traffic controller, the kernel is not useful without something to control. If the kernel is the tower, the applications are the airplanes. Applications make requests to the kernel and receive resources, such as memory, CPU, and disk, in return. The kernel also abstracts the complicated details away from the application. The application doesn’t know if a block of disk is on a solid-state drive from manufacturer A, a spinning metal hard drive from manufacturer B, or even a network file share. Applications just follow the kernel’s Application Programming Interface (API) and in return don’t have to worry about the implementation details.
+
+When we, as users, think of applications, we tend to think of word processors, web browsers, and email clients. The kernel doesn’t care if it is running something that’s user facing, a network service that talks to a remote computer, or an internal task. So, from this we get an abstraction called a process. A process is just one task that is loaded and tracked by the kernel. An application may even need multiple processes to function, so the kernel takes care of running the processes, starting and stopping them as requested, and handing out system resources.
+\section{Rola Open Source}
+Role of Open Source
+Linux started out in 1991 as a hobby project by Linus Torvalds. He made the source freely available and others joined in to shape this fledgling operating system. His was not the first system to be developed by a group, but since it was a built-from-scratch project, early adopters had the ability to influence the project’s direction and to make sure mistakes from other UNIXes were not repeated.
+
+Software projects take the form of source code, which is a human readable set of computer instructions. The source code may be written in any of hundreds of different languages, Linux just happens to be written in C, which is a language that shares history with the original UNIX.
+
+Source code is not understood directly by the computer, so it must be compiled into machine instructions by a compiler. The compiler gathers all of the source files and generates something that can be run on the computer, such as the Linux kernel.
+
+Historically, most software has been issued under a closed-source license, meaning that you get the right to use the machine code, but cannot see the source code. Often the license specifically says that you will not attempt to reverse engineer the machine code back to source code to figure out what it does!
+
+Open source takes a source-centric view of software. The open source philosophy is that you have a right to obtain the software, and to modify it for your own use. Linux adopted this philosophy to great success. People took the source, made changes, and shared them back with the rest of the group.
+
+Alongside this, was the GNU project (GNU’s, not UNIX). While GNU was building their own operating system, they were far more effective at building the tools that go along with a UNIX operating system, such as the compilers and user interfaces. The source was all freely available, so Linux was able to target their tools and provide a complete system. As such, most of the tools that are part of the Linux system come from these GNU tools.
+
+There are many different variants on open source, and those will be examined in a later chapter. All agree that you should have access to the source code, but they differ in how you can, or in some cases, must, redistribute changes.
+\section{Dystrybucje}
+Linux Distributions
+Take Linux and the GNU tools, add some more user facing applications like an email client, and you have a full Linux system. People started bundling all this software into a distribution almost as soon as Linux became usable. The distribution takes care of setting up the storage, installing the kernel, and installing the rest of the software. The full featured distributions also include tools to manage the system and a package manager to help you add and remove software after the installation is complete.
+
+Like UNIX, there are many different flavors of distributions. These days, there are distributions that focus on running servers, desktops, or even industry specific tools like electronics design or statistical computing. The major players in the market can be traced back to either Red Hat or Debian. The most visible difference is the package manager, though you will find other differences on everything from file locations to political philosophies.
+
+Red Hat started out as a simple distribution that introduced the Red Hat Package Manager (RPM). The developer eventually formed a company around it, which tried to commercialize a Linux desktop for business. Over time, Red Hat started to focus more on the server applications such as web and file serving, and released Red Hat Enterprise Linux, which was a paid service on a long release cycle. The release cycle dictates how often software is upgraded. A business may value stability and want long release cycles, a hobbyist or a startup may want the latest software and opt for a shorter release cycle. To satisfy the latter group, Red Hat sponsors the Fedora Project which makes a personal desktop comprising the latest software, but still built on the same foundations as the enterprise version.
+
+Because everything in Red Hat Enterprise Linux is open source, a project called CentOS came to be, that recompiled all the RHEL packages and gave them away for free. CentOS and others like it (such as Scientific Linux) are largely compatible with RHEL and integrate some newer software, but do not offer the paid support that Red Hat does.
+
+Scientific Linux is an example of a specific use distribution based on Red Hat. The project is a Fermilab sponsored distribution designed to enable scientific computing. Among its many applications, Scientific Linux is used with particle accelerators including the Large Hadron Collider at CERN.
+
+Open SUSE originally derived from Slackware, yet incorporates many aspects of Red Hat. The original company was purchased by Novell in 2003, which was then purchased by the Attachmate Group in 2011. The Attachmate group then merged with Micro Focus International. Through all of the mergers and acquisitions, SUSE has managed to continue and grow. While Open SUSE is desktop based and available to the general public, SUSE Linux Enterprise contains proprietary code and is sold as a server product.
+
+Debian is more of a community effort, and as such, also promotes the use of open source software and adherence to standards. Debian came up with its own package management system based on the .deb file format. While Red Hat leaves non Intel and AMD platform support to derivative projects, Debian supports many of these platforms directly.
+
+Ubuntu is the most popular Debian derived distribution. It is the creation of Canonical, a company that was made to further the growth of Ubuntu and make money by providing support.
+
+Linux Mint was started as a fork of Ubuntu Linux, while still relying upon the Ubuntu repositories. There are various versions, all free of cost, but some include proprietary codecs, which can not be distributed without license restrictions in certain countries. Linux Mint is quickly supplanting Ubuntu as the world's most popular desktop Linux solution.
+
+We have discussed the distributions specifically mentioned in the Linux Essentials objectives. You should be aware that there are hundreds, if not thousands more that are available. It is important to understand that while there are many different distributions of Linux, many of the programs and commands remain the same or are very similar.
+\section{Polecenia (komendy)}
+What is a Command?
+The simplest answer to the question, "What is a command?", is that a command is a software program that when executed on the command line, performs an action on the computer.
+
+When you consider a command using this definition, you are really considering what happens when you execute a command. When you type in a command, a process is run by the operating system that can read input, manipulate data and produce output. From this perspective, a command runs a process on the operating system, which then causes the computer to perform a job.
+
+However, there is another way of looking at what a command is: look at its source. The source is where the command "comes from" and there are several different sources of commands within the shell of your CLI:
+
+Commands built-in to the shell itself: A good example is the cd command as it is part of the bash shell. When a user types the cd command, the bash shell is already executing and knows how to interpret that command, requiring no additional programs to be started.
+Commands that are stored in files that are searched by the shell: If you type a ls command, then the shell searches through the directories that are listed in the PATH variable to try to find a file named ls that it can execute. These commands can also be executed by typing the complete path to the command.
+Aliases: An alias can override a built-in command, function, or a command that is found in a file. Aliases can be useful for creating new commands built from existing functions and commands.
+Functions: Functions can also be built using existing commands to either create new commands, override commands built-in to the shell or commands stored in files. Aliases and functions are normally loaded from the initialization files when the shell first starts, discussed later in this section.
+Consider This
+While aliases will be covered in detail in a later section, this brief example may be helpful in understanding the concept of commands.
+An alias is essentially a nickname for another command or series of commands. For example, the cal 2014 command will display the calendar for the year 2014. Suppose you end up running this command often. Instead of executing the full command each time, you can create an alias called mycal and run the alias, as demonstrated in the following:
+$ alias mycal="cal 2015"
+$ mycal
+\section{Platformy sprzętowe}
+Hardware Platforms
+Linux started out as something that would only run on a computer like Linus’: a 386 with a specific hard drive controller. The range of support grew, as people built support for other hardware. Eventually, Linux started supporting other chips, including hardware that was made to run competitive operating systems!
+
+The types of hardware grew from the humble Intel chip up to supercomputers. Later, smaller-size, Linux supported, chips were developed to fit in consumer devices, called embedded devices. The support for Linux became ubiquitous such that it is often easier to build hardware to support Linux and then use Linux as a springboard for your custom software, than it is to build the custom hardware and software from scratch.
+
+Eventually, cellular phones and tablets started running Linux. A company, later bought by Google, came up with the Android platform which is a bundle of Linux and the software necessary to run a phone or tablet. This means that the effort to get a phone to market is significantly less, and companies can spend their time innovating on the user facing software rather than reinventing the wheel each time. Android is now one of the market leaders in the space.
+
+Aside from phones and tablets, Linux can be found in many consumer devices. Wireless routers often run Linux because it has a rich set of network features. The TiVo is a consumer digital video recorder built on Linux. Even though these devices have Linux at the core, the end users don’t have to know. The custom software interacts with the user and Linux provides the stable platform.
+\section{Zad. 1. PSO/PSK Przygotowanie systemu komputerowego do instalacji systemu operacyjnego}
+Wszystkie polecenia z pozycji roota:
+\begin{enumerate}
+\item{\textbf{fdisk -l}}
+\item{\textbf{fdisk /dev/sdb}\newline
+	przegląd, usuwanie, dodanie partycji - kończymy zapisem - polecenie ''w''.}
+\item{\textbf{mkfs.ext4 /dev/sdb1}\newline
+	tworzenie systemu plików i formatowanie}
+\item{\textbf{mkdir /media/nowy\_dysk}\newline
+	budowa punktu montowania}
+\item{\textbf{mount /dev/sbd1 /media/nowy\_dysk}\newline
+	zamontowanie nowego dysku}
+\item{\textbf{chmod 777 /media/nowy\_dysk}\newline
+	nadanie stosownych uprawnień}
+\end{enumerate}
+\section{Zawartość notatnika ucznia}
+Notatnik jest obowiązkowy i ma zawierać:\newline
+\begin{enumerate}
+\item{datę zajęć}
+\item{temat}
+\item{listę ważniejszymi poleceń} 
+\item{czynności podjęte dla wykonywania ćwiczeń}
+\item{krótkie i rzeczowe opracowanie (sprawozdanie) wg. wzoru:\newline
+	\uppercase{problem}\newline
+	\uppercase{rozwiązanie}\newline
+	\uppercase{wnioski}
+\end{enumerate}
+\subsection{Przykład opracowania tematu ''Przygotowanie systemu komputerowego do instalacji systemu operacyjnego''}
+\textsl{Podstawowym zadaniem technika jest takie przygotowanie nośnika danych (hdd) aby powiodło się zainstalowanie i możliwe było bezpieczne użytkowanie SO. Składa się na to partycjonowanie i formatowanie dysku. Do trudniejszych należy zmiana rozmiaru partycji z danymi i instalacja kolejnego SO.\newline
+Wykonanie ćw. 1 polegało na:
+\begin{enumerate}
+\item{dodaniu kolejnego hdd do systemu}
+\item{sprawdzeniu istniejących partycji, ich usunięciu, dodaniu nowej partycji typu Linux: \textbf{fdisk -l}}
+\item{formatowania nowej partycji systemem plików ext4: \textbf{mkfs.ext4 /dev/sdb1}}
+\item{utworzenia p-ktu montowania: \textbf{mkdir /media/nowy}}
+\item{zamontowania zasobu: \textbf{mount /dev/sdb1 /media/nowy}}
+\item{nadaniu uprawnień do zasobu: \textbf{chmod 777 /media/nowy}}\newline
+\end{enumerate}
+Podczas wykonywania ćw. 1 na etapie 1 i 2 nie wystąpiły żadne problemy. Po formatowaniu partycja jednak nie pojawiła się - nie została zamontowana. Rozwiązano to tworząc nowy punkt montowania i zamontowano partycję w tym p-kcie. Po czym okazało się niemożliwe korzystanie z zasobu ze względu na prawa. Ustawiono tymczasowo pełny dostęp do zasobu.}
+\section{Zad. 2. PSO/PSK Zmiana rozmiaru istniejącej partycji w celu instalacji drugiego systemu operacyjnego}
+Wykonaj zadanie stosując polecenie \textbf{resize2fs -p /dev/part\_do\_zmiany}
+\section{Rozwiązywanie zadań}
+\subsection{Wzorcowy sposób rozwiązywania zadań -- przykład}
+\begin{enumerate}
+\item{Zad. xyz: wyszukaj plik nazwany \textbf{dpkg.status.0} w katalogach \textbf{/var} i \textbf{/etc}}
+Poniżej wydobycie polecenia, króre realizuje wyszukiwanie za pomocą przekierowania potoków~i zapis potoku do pliku \textbf{zad. xyz}:
+\begin{verbatim}
+navegante@velero:~$ history | tail | grep find > zad xyz
+navegante@velero:~$ cat zad xyz
+ 2006 sudo find /var /etc -iname "dpkg.status.0"
+ 2010 history | tail | grep find > zad xyz
+navegante@velero:~$ sudo find /var /etc -iname "dpkg.status.0">> zad xyz
+navegante@velero:~$ cat zad xyz
+ 2006 sudo find /var /etc -iname "dpkg.status.0"
+ 2010 history | tail | grep find > zad xyz
+/var/backups/dpkg.status.0
+\end{verbatim}
+\end{enumerate}
+Po zapisaniu \textbf{zad. xyz} umieszczamy go w katalogu nazwanym wg. daty dziennej -- tutaj "data" i po zakończeniu ćwiczeń tarujemy: \textbf{tar -cvf data.tar data} i zapisujemy na serwer: \textbf{scp data.tar login@ipserwera:}
+\section{Polecenia podstawowe}
+\subsection{Znaki globalne (uogólniające)}
+Patrz punkt \textbf{2.2.4} ze skryptu.
+\footnote{\url{http://mediologia.pl/bash/5-2-znaki-uogolniajace}}
+Mechanizm rozwijania nawiasów jest symbolizowany przez \textbf{...}.
+\subsection{Konta użytkowników}
+Do zakładania kont dla nowych uzytkowników służą trzy polecenia: \textbf{adduser} dla niedoświadczonych adminów chcących założyć jedno nowe konto; \textbf{useradd} dla doświadczonych i także dla tych ostatnich, metoda wsadowa, \textbf{newusers}.
+\subsubsection{useradd}
+Metoda ta pozwala na uzyskanie niemal wszystkich możliwych opcji konfiguracji konta za pomocą jednej, złożónej komendy\footnote{\url{http://www.tecmint.com/add-users-in-linux/}}.
+Tutaj, z braku miejsca, będę się odwoływał jedynie do tych akapitów helpu w \textit{www.tecmint.com}, które różnią się w ""naszym"" Debianie.
+Najczęściej chcemy utworzyć nowe konto w oparciu o domyślne ustawienia systemu zmieniając tylko te opcje, które są dla nas ważne. Chcemy utworzyć i przypisać katalog domowy, nadać hasło, dodać info o uzytkowniku i przypisać domyślny interpreter poleceń. Zatem komenda przybierze postać:\newline
+\textbf{sudo useradd -m -d /home/nlogin -p nlogin123 -c "Główny Księgowy" -s /bin/bash nlogin}
+Jak widać poniżej, wpisy w \textit{passwd} i \textit{shadow} zostały umieszczone. Jednak hasło nie jest szyfrowane i nie będzie działać.
+\begin{verbatim}
+nlogin:x:1104:1116:Główny Księgowy:/home/nlogin:/bin/bash
+sudo cat /etc/shadow | grep nlogin
+nlogin:nlogin123:16855:0:99999:7:::
+\end{verbatim}
+Musimy ręcznie użyć \textit{passwd}. Proszę przeanalizować poniższy wpis:
+\begin{verbatim}
+navegante@velero:~$ sudo passwd nlogin
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+navegante@velero:~$ sudo login nlogin
+Password: 
+Linux velero.zs37.pl 3.2.0-4-686-pae #1 SMP Debian 3.2.68-1+deb7u6 i686
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+nlogin@velero:~$ pwd
+/home/nlogin
+nlogin@velero:~$ ls -l
+total 3
+-rw-r--r-- 1 nlogin nlogin   53 Jan 23  2014 instr_bhp
+drwxr-xr-x 2 nlogin nlogin 1024 Jan 23  2014 prace
+drwxr-xr-x 2 nlogin nlogin 1024 Jan 23  2014 prace_nowe
+-rw-r--r-- 1 nlogin nlogin    0 Oct 24  2014 whoswho
+nlogin@velero:~$ 
+\end{verbatim}
+Wszystko działa, tylko to hasło ... Prostym rozwiązaniem jest komenda \textbf{chage -d 0 username}, która wymusi na użytkowniku reset hasła przy pierwszym logowaniu. Warto wiedzieć, że nominalne opcja \textit{-p} w poleceniu \textit{useradd} oczekuje hasła zaszyfrowanego.
+\textlabel{inny szkielet dla innego typu użytkownika}
+Można różnym typom użytkowników przyporządkować oddzielne ""szkielety"". Np. tworzymy katalog \textit{custom.skel} z odpowiednią zawartością i przydzielamy od razu w \textit{useradd}: \textbf{# useradd -m -d /home/navin -k /etc/custom.skell -s /bin/bash -c "Administrator baz danych" -g 1031 navin}
+\textbf{Zadanie}
+a)utwórz trzy nowe konta metodą useradd dla trzech typów pracowników: biuro, zarząd, księgowy; dla każdego typu przygotuj inny szkielet (etc/skel);
+
+b)opracuj to zadanie w formie skryptu.
+\subsection{Wyszukiwanie: polecenie \textbf{find}}
+\footnote{\url{http://www.linux.net.pl/~wkotwica/doc/find/find_toc.html#TOC45}}
+Moc find
+\subsection{Przekierowania, strumienie, potoki}
+\footnote{\url{http://www.szkolenia-linux.pl/doku.php?id=materialy:podstawy-administracji:przekierowania-i-potoki}}
+Patrz punkt \textbf{2.2.6} ze skryptu.
+Mechanizm potoków to bardzo potężne i warte zrozumienia już na naszym etapie umiejętności narzędzie: "O ile (...) korzystającym z użytkownikom Windowsa może być ciężko zrozumieć potęgę tego mechanizmu, tak bardziej doświadczeni użytkownicy systemu GNU/Linux są w pełni świadomi jego możliwości i wiedzą jak duże ma znaczenie w codziennej pracy (nie tylko administratorów ale również zwykłych użytkowników). To właśnie dzięki mechanizmowi potoków możliwy jest podział narzędzi na małe programy wyspecjalizowane do wykonywania jednej konkretnej rzeczy np. program sortujący, program usuwający znaki, program zamieniający znaki czy filtrujący linie. Dzięki rozdzieleniu narzędzi tekstowych na kilka osobnych programów i wykorzystania potoków mamy do dyspozycji w pełni uniwersalne środowisko któremu nie straszne żadne zadanie. Nie musimy posiadać skomplikowanych, dużych programów do filtrowania, sortowania, wyodrębniania klientów z bazy danych, wystarczą bardzo podstawowe narzędzia i umiejętność posługiwania się nimi. \footnote{\url{http://regalis.com.pl/tajemnice-wejscia-wyjscia/}}".
+\footnote{\url{http://www.szkolenia-linux.pl/doku.php?id=materialy:podstawy-administracji:przekierowania-i-potoki}}".
+\subsubsection{Deskryptory plików}
+\begin{enumerate}
+\item{Wybór deskryptora}
+Zad. typu kierowanie wyniku i błędów do oddzielnych plików, jednego pliku, tylko błędy w pliku, pozbywania się błędów. Patrz przykłady z \url{http://regalis.com.pl/tajemnice-wejscia-wyjscia/} "Wybór deskryptora".
+\item{Potoki}
+Patrz przykłady z \url{http://regalis.com.pl/tajemnice-wejscia-wyjscia/} "Używanie potoków".
+\item{Na ekran i do pliku - komenda \textbf{tee}}
+Czasem zachodzi potrzeba jednoczesnego zapisu tego co pojawia się na ekranie.
+\marginpar{zadanie: Sprawdź adresy hostów w twojej sieci i jednocześnie zapisz je do pliku 'hosty'. Rozwiązanie: nmap -sP 192.168.0.0-255 | tee hosty}
+\item{xargs - lista argumentów podawana w stdin}
+Patrz przykłady z \url{http://www.szkolenia-linux.pl/doku.php?id=materialy:podstawy-administracji:przekierowania-i-potoki} "xargs - lista argumentów podawana w stdin".
+Komenda \textbf{xargs} pozwala wywoływać podobne polecenia z różnymi argumentami, które są przekazywane ze strumienia wejściowego (wyniku innej komendy lub z pliku). Prościej polecenie \textit{xargs} czyta ze standardowego wejścia a potem wykonuje wskazany program przekazując do niego wczytane parametry. Dwie domyślne cechy tej komendy: jeśli nie wskażemy jaki program ma zostać wykonany, to będzie to \textit{echo}, znakiem oddzielającym argumenty w czytanym strumieniu wejściowym jest: spacja, znak nowego wiersza lub tabulator tzn. jakikolwiek biały odstęp\footnote{\url{http://www.mblog.boo.pl/artykul-162-xargs-przesylanie-starnardowego-wejscia-jako-parametry-do-programu.html}}.
+Przykład 1: potrzebujemy wykonać serię katalogów o nazwach jak np. 0 -- 10.\newline
+\textbf{seq 10 -1 -0 | xargs mkdir}\newline
+Komenda \textit{seq} odlicza a \textit{xagrs} przekazuje tę sekwencję do \textit{mkdir}.
+Przykład 2: okazało się, że nazwa cyfrowa nie jest dobra i trzeba ją zamienić na ''labor_numer'':\newline
+\textbf{ls | xargs -I {} -t mv {} labor{}}\newline
+Flaga -I określa ciąg, który zostaje zastąpiony, -t pisze co będzie wykonane na \textit{stderr} (można -t pominąć; uwaga na brak spacji po \textit{mv}); 
+\end{enumerate}
+\item{xargs w połączeniu z find}
+
+\section{Typowe zadania egzaminacyjne}
+\subsection{Zasady haseł w secpol.msc (dla Win, a w Linuxie?)}
+Kilkakrotnie twórcy zadań egzaminacyjnych sięgali do zasad haseł określanych w secpol.msc. Np.: co 3 dni użytkownicy musieli zmienić hasło (trzeba było to zmienić); system wymuszał stosowanie bardzo długich haseł (trzeba było ustawić krótsze), czy wymusić tworzenie silnych haseł.
+\subsubsection{Przykład}
+Rozważmy zadanie: \textit{Jako admin nie zezwalaj na zmianę haseł przez użytkowników.}\newline
+Dysponujemy dwoma narzędziami (trzecim jest oczywiście edycja ręczna): \textbf{usermod} - modyfikuje konto użytkownika i \textbf{passwd} - zmienia hasło użytkownika. Jeśli popatrzymy na opcje obu narzędzi, zauważymy zbieżność funkcji, np. -e expire lub -L -l lock, jednak jedno dotyczy konta a drugie jego hasła. Czytając \url{http://www.arturpyszczuk.pl/commands-passwd.html} zauważmy ładne zastosowanie \textit{passwd} do wydobycia witalnych info o koncie i haśle: \textbf{sudo passwd -S} dostajemy informację składającą się z siedmiu pól (czy wiesz skąd pochodzą?):\newline
+\begin{inparaenum}[\itshape a\upshape)]
+\item login,
+\item czy hasło jest zablokowane (L), nie ma hasła (NP), lub czy jest użyteczne hasło (P),
+\item data ostatniej zmiany hasła w ludzkiej postaci tym razem,
+\item minimalny i maksymalny czas,
+\item czas ostrzeżenia o zbliżającej się konieczności zmiany hasła,
+\item oraz, wyrażony w dniach, nieaktywny okres czasu hasła.
+\end{inparaenum}
+\textit{Minimalny czas} oznacza liczbę dni, w którym nie można zmieniać hasła oraz \textit{maksymalny czas} liczbę dni kiedy hasło jest ważne; po upływie tego czasu hasło trzeba zmienić. Ustawianie minimalnego czasu dokonuje się przez opcję \textbf{-n}, po której następuje wartość dziesiętna ilości dni. A wartość maksymalną ustawia się przez opcję \textbf{-x}. Jeśli użytkownik będzie chciał zmienić hasło, to dostanie informację, że musi poczekać na zmianę hasła, aż upłynie minimalny czas.
+\begin{verbatim}
+navegante@velero:~$ sudo passwd -S bazyli
+[sudo] password for navegante: 
+bazyli P 03/26/2015 199 99 7 -1
+navegante@velero:~$ sudo passwd -n 6 -x 5 bazyli
+passwd: password expiry information changed.
+navegante@velero:~$ sudo passwd -S bazyli
+bazyli P 03/26/2015 6 5 7 -1
+\end{verbatim}
+Zwróć uwagę na pola 4 i 5 (czasy min i max). Z poprzednich zajęć o własnościach pól z \textbf{/etc/shadow} wiemy, że jeśli wartość w polu 4 jest większa od wartości w polu 5 - użytkownik nie może zmienić hasła. Zatem w przykładowym zadaniu należałoby dla każdego usera zastosować \textit{passwd} w podobny sposób. Czy umiesz napisać skrypt, który ułatwi pracę admina?
+\subsubsection{Zadanie}
+Napisz algorytm skryptu, który wszystkim userom systemu zablokuje możliwość zmiany hasła.
+\section{Polityka bezpieczeństwa haseł}
+Jak czytamy na \url{http://debian.2.n7.nabble.com/Polityka-bezpiecze-stwa-hase-w-debianie-td2093133.html}
+\begin{verbatim}
+> Jak wymusić politykę bezpieczeństwa dotyczącą haseł w debianie
+> (długość, znaki specjalne, ważność, hasło nie może się powtórzyć
+> itd.)?
+
+W tym celu może być pomocny moduł PAM cracklib, warto zapoznać się z
+jego opcjami.
+
+Pozdrawiam, 
+
+> Dzięki za info, a byłbyś w stanie powiedzieć mi jak to uruchomić, bo nie
+> bardzo wiem jak się za to zabrać...
+>
+> --
+> Pozdrawiam
+>
+> 
+... [show rest of quote]
+Witam
+
+Luknij na to :)
+
+http://www.cyberciti.biz/tips/linux-check-passwords-against-a-dictionary-attack.html
+
+http://www.deer-run.com/~hal/sysadmin/pamcracklib.html
+\end{verbatim}
+Jak widać, listy dyskusyjne są nieocenioną pomocą dla użytkowników systemów operacyjnych,~a dla administratorów są lekturą obowiązkową. Pytasz i (zwykle) masz.\newline
+Na \url{http://www.deer-run.com/~hal/sysadmin/pamcracklib.html} czytamy: ''In order to improve the security of standard reusable passwords, ''best practices'' tell us to require users to change their passwords on a regular basis, enforce minimum lengths and good ''rules'' for new passwords (such as requiring mixed case and non-alphanumeric characters), and even keep a ''history'' of previous user passwords so that users don't ''repeat". Interestingly, Unix systems have typically lagged behind other operating systems in providing this functionality--particularly when it comes to rule-based systems for requiring strong passwords, as well as functionality for keeping password history. In an effort to address this shortcoming, the PAM module pamcracklib was developed for Linux systems."\newline
+''Aby poprawić bezpieczeństwo zwykłych haseł, <<dobre porady>> sugerują by wymagać od użytkowników regularnej zmiany haseł, wymuszać zadaną minimalną długość i stosować <<zasady tworzenia>> nowych haseł (stosować wielkie i małe litery i znaki nieliterowe) a nawet pamiętać historię poprzednich haseł użytkowników aby ich nie powtarzać. Ciekawym jest, że systemy unixowe zostały w tyle we wprowadzaniu tych właściwości, szczególnie w kwestii zasad dotyczących mocnych haseł i ich pamiętaniu. Aby temu zaradzić wprowadzono dla Linuxa moduł PAM \textit{pamcracklib}."
+
+\section{Triki przyspieszające pracę}
+\subsection{Używaj \textbf{!} by powtórzyć ostatnie polecenie}
+
+\textbf{!ls} wykona ostatnie listowanie z użytymi wtedy opcjami \textit{ls -lrt}, \textbf{!gedit} otworzy w edytorze gedit ostatni plik.
+\subsubsection{Przykład}
+Listowanie pewnego katalogu dało wynik: \textbf{ls –l} stocks.txt, aby otworzyć \textit{stocks.txt} użyj \textbf{vi !\$} (ostatni argument).
+\subsection{pushd i popd (directory stack: dirs), cd - , cd \~ by zmieniać katalogi}
+\textbf{cd -} to najlepsza komenda by przełączać się pomiędzy dwoma często używanymi katalogami.\newline
+\textbf{pushd} zapisuje do bufora aktualny katalog lub inny jeśli podany jako parametr.\newline
+\textbf{popd} wraca do katalogu z góry bufora.\newline
+\textbf{dirs} wyświetla ten bufor.
+\subsubsection{Przykład}
+\url{http://unix.stackexchange.com/questions/77077/how-do-i-use-pushd-and-popd-commands}
+\section{Wybór z \textit{10 Tips on find command in UNIX}}
+\url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html}
+\subsection{Szukaj tylko w aktualnym katalogu}
+Często szukamy plików, które są ''nowe'' i na pewno są w danym katalogu. Opcja \textit{–type} może być zmodyfikowana aby szukać tylko plików, linków lub katalogów a \textit{–maxdepth} określa jak głęboko mamy szukać.
+\begin{verbatim}
+find . -maxdepth 1 -type f -newer first_file
+\end{verbatim}
+Inny sposób by to zrobić:
+\begin{verbatim}
+find . -type f -cmin 15 -prune
+\end{verbatim}
+co się wykłada: szukaj typ plik, ostatnio zmieniany 15 minut temu, tylko w aktualnym katalogu (bez podkatalogów).
+more: \url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html\#ixzz3Y3jojAzd}
+
+\textit{prune} means to cut or chop off czyli szukaj tylko w aktualnym katalogu.\newline
+\textbf{Tip1:} 
+Ważne o \textit{find}\newline
+\begin{inparaenum}[\itshape a\upshape)]
+\item{find –print i find znaczy to samo, ponieważ –print stanowi domyślną opcję dla polecenia find.}\newline
+\item{find –print0 powinno być użyte by pominąć znaleziska zawierające ''białe znaki -- spacje'' w nazwie pliku lub ścieżki gdy przekazujemy wyjście do xargs, użyj też xargs -0 razem z find –print0.}\newline
+\item{find posiada opcję \textit{ –delete}, która może być użyta zamiast \textit {-exec rm \{\} \\;}}
+\end{inparaenum}
+Read more: \url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html\#ixzz3Y3oJTAq1}
+
+\if01 % -------- START THE CUT ---------
+
+\textbf{Tip2:} 
+\$* : \$* is one of the special bash parameter which is used to expands positional parameters from position one.
+if you give double quotes and expansion is done within double quotes, it only expands to a single word and corresponding value of each parameter will be separated by the first letter of the IFS environment variable defined in bash.
+
+Read more: \url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html\#ixzz3Y3kzsTUe}
+\fi % ---------- END THE CUT -----------
+
+Read more: \url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html\#ixzz3Y1HsV3ck}
+
+Read more: \url{http://javarevisited.blogspot.com/2011/03/10-find-command-in-unix-examples-basic.html\#ixzz3Y1FbCOBg}
+
+\subsection{Screenfetch}
+Screenfetch provides useful information about your computer and your operating system within a terminal window.
+Read more: \url{http://linux.about.com/od/commands/fl/Show-System-Information-In-Your-Terminal-With-Screenfetch.htm}
+\section{I/O error}
+Jeśli nie można usunąć katalogu jako \textit{root}, który jest uszkodzony, jest to najczęściej zadanie do usunięcia przez program \textit{fsck}. Nie jest to możliwe gdy system jest aktywny. Trzeba wykonać restart z wymuszeniem kontroli przez \textit{fsck} podając polecenie \textbf{sudo shutdown -r -F now}. Jeśli obawiasz się, że nastąpiła poważna awaria, zrób najpierw backup (paranoid!).\newline
+Może to być spowodowane przez \textit{file locking issue}. Aby sprawdzić aktywne procesy, które używają te pliki uruchom: \textbf{lsof *	extbar grep locale}.
+\section{delete or remove hidden files}
+\begin{verbatim}
+# rm install.log
+# rm install.log kambing.log secure1.log config.doc passwd
+# rm -r ./*important-file*
+# rm –rf .??*
+\end{verbatim}
+Ostatnie z \textit{–rf and the use '' .??* ''} usunie wszystkie ukryte pliki lub katalogi. 
+''.'' oznacza plik ''ukryty a '' ?? '' oznacza min. dwa znaki aby wyłączyć katalog nadrzędny czyli '' .. '' i '' * '' by usunąć wszystko pozostałe.
+\subsection{Usuwanie na podstawie \textbf{inode}}
+\begin{verbatim}
+ls -i
+245242 sysdetails.txt
+245243 tat - display file or filesystem status
+976527 test
+# find . -inum 245243 -exec rm –i {} \;
+\end{verbatim}
+Powyższe usunie plik \textit{tat}.
+\section{Grep dla wielu wzorców wyszukiwania}
+stopka\footnote{Na podst.:\url{http://unix.stackexchange.com/questions/37313/how-do-i-grep-for-multiple-patterns}}
+Po pierwsze trzeba zabezpieczyć szukaną frazę przed interpretacją przez \textit{shell} przez otoczenie jej pojedynczym cudzysłowem. Oczywiście cudzysłów nie może występować w szukanej frazie.
+\begin{verbatim}
+grep 'foo*' *.txt
+\end{verbatim}
+Gdyby jednak cudzysłów \textit{musiał} występować w szukanej frazie, możesz użyć: '\' (end string literal, literal quote, open string literal).
+\begin{verbatim}
+grep 'foo*'\''bar' *.txt
+\end{verbatim}
+Grep rozumie dwie składnie dla szukanych fraz. Stara domyślna, oparta na wyrażeniach globalnych (basic regular expressions) nie obsługuje zamiany (operator '\textbar'), zatem można go zastosować lecz poprzedzonego backslash'em.
+\begin{verbatim}
+grep 'foo\|bar' *.txt
+\end{verbatim}
+Wygodniej użyć nowej składni (extended regular expressions) dodając opcję \textbf{-E} do \textbf{grep}. W Linux można użyć \textbf{egrep} zamiast \textbf{grep -E}.
+\begin{verbatim}
+grep -E 'foo|bar' *.txt
+\end{verbatim}
+Inna możliwość to podanie kilku szukanych fraz przez poprzedzenie każdej z nich \textbf{-e}:
+\begin{verbatim}
+grep -e foo -e bar *.txt
+\end{verbatim}
+Dla stałych fraz warto użyć \textbf{fgrep} lub \textbf{grep -F}, dla niewielkich plików różnica w szybkości wyszukiwania jest nieistotna, lecz dla długich -- znacząca.\newline
+Jednakowoż \textbf{-F} wydaje się być użytecznym:
+\begin{verbatim}
+$> cat text
+some text
+foo
+another text
+bar
+end of file
+
+$> patterns="foo
+bar" 
+
+$> grep -F "${patterns}" text
+foo
+bar
+\end{verbatim}
+
+ more: \url{http://javarevisited.blogspot.com/2011/03/unix-command-tutorial-working-fast-in.html\#ixzz3XyEtMm9Z}
+
+
+Read more: \url{http://javarevisited.blogspot.com/2011/03/unix-command-tutorial-working-fast-in.html#ixzz3XyEKX5Hr}
+
+Read more: \url{http://javarevisited.blogspot.com/2011/03/unix-command-tutorial-working-fast-in.html\#ixzz3XyAdVbQj}
+
+
+\url{http://javarevisited.blogspot.com/2011/03/unix-command-tutorial-working-fast-in.html#ixzz3Xy9MqCqd}
+
+\section{Użyteczny program \textit{cut}}
+Często jest potrzeba wydobycia z tekstu tylko niektórych kolumn, np. gdy linie są ponumerowane, a potrzebujemy go posortować wg. innych kryteriów lub gdy zawiera listę imion i nazwisk a chcemy wydobyć tylko nazwiska itp. \textbf{Cut} wycina fragment tekstu poprzez wybór kolumn(y).
+\begin{enumerate}
+\item{Wybór kolumny}\newline
+Aby wybrać tylko jedną kolumnę używamy opcji \textbf{ -c}. Oto przykład wybierający pewną (tu drugą) kolumnę z pliku \textit{metalista}.
+\begin{verbatim}
+$ cat metalista
+Anna Abecka
+Bożena Babecka
+Celina Cacka
+Damian Dusigrosz
+Eryk Ekolwentny
+
+$ cut -c2 metalista
+n
+o
+e
+a
+r
+\end{verbatim}
+\item{Wybór zakresu kolumn}
+\begin{verbatim}
+$ cut -c3-5 metalista
+na 
+że
+lin
+mia
+yk 
+\end{verbatim}
+\item{Wybór kolumn przez podanie pozycji start lub stop}\newline
+W przykładzie określono tylko pozycję startową i uzyskano kolumny od 3-ciej do końca linii:
+\begin{verbatim}
+$ cut -c3- metalista
+na Abecka
+żena Babecka
+lina Cacka
+mian Dusigrosz
+yk Ekolwentny
+\end{verbatim}
+
+\item{Określono pozycję startową (1) i końcową (9) i uzyskano kolumny od 1-wszej do 9-tej:}
+\begin{verbatim}
+$ cut -c-9 metalista
+Anna Abec
+Bożena B
+Celina Ca
+Damian Du
+Eryk Ekol
+\end{verbatim}
+\item{Nie wymaga komentarza:}
+\begin{verbatim}
+$ cut -c5-12 metalista
+ Abecka
+ena Babe
+na Cacka
+an Dusig
+ Ekolwen
+\end{verbatim}
+\item{Wybór z ogranicznikiem (ang. delimiter)}.
+Często trzeba wyciąć cenne dane z pliku zawierającego różne ograniczniki np. jak z pliku /etc/passwd. Otrzymaliśmy taką listę userów pewnego systemu:
+\begin{verbatim}
+wald:x:1055:1063:Ignacy Poziomko,58,3456,1234,admin systemu:/home/wald:/bin/bash
+homeless:x:1058:1065::/home/homeless:/bin/sh
+wojciech:x:1057:1066:Wojciech Łękawski,58,123456,789456,admin baz danych:/home/wojciech:/bin/bash
+horacy:x:1061:1069:Horacy Dąbrowski,58,456123,789369,speclalista d/s Librus:/home/horacy:/bin/bash
+grzeorz:x:1065:1073:Grzegorz Łękawski,58,7441,85296,admin baz danych:/home/grzeorz:/bin/bash
+marzenka:x:1069:1077:Marzena Łękwska,58,741,963,księgowa:/home/marzenka:/bin/bash
+edyta:x:1080:1090:Edyta Kowalska,58,345666,6778900,sekretarka zarządu:/home/edyta:/bin/bash
+eugenia2:x:1082:1092:Eugenia Kwiatkowska, 58, 123, 456:/home/eugenia2:/bin/bash
+ariadna:x:1083:1093:Ariadna Stefopulos,58,12345678,54678908,specjalista d.s. kadr:/home/ariadna:/bin/bash
+lolita2:x:1089:1099:Lola Martinez,58,789456,123564,sekretarka:/home/lolita2:/bin/bash
+\end{verbatim}
+Polecenie \textbf{cut -d':' -f1,5 listapwd \textbar sort}, gdzie ustawiamy ogranicznik pola na ':' spowoduje:
+\begin{verbatim}
+ariadna:Ariadna Stefopulos,58,12345678,54678908,specjalista d.s. kadr
+edyta:Edyta Kowalska,58,345666,6778900,sekretarka zarządu
+eugenia2:Eugenia Kwiatkowska, 58, 123, 456
+grzeorz:Grzegorz Łękawski,58,7441,85296,admin baz danych
+homeless:
+horacy:Horacy Dąbrowski,58,456123,789369,speclalista d/s Librus
+lolita2:Lola Martinez,58,789456,123564,sekretarka
+marzenka:Marzena Łękwska,58,741,963,księgowa
+wald:Ignacy Poziomko,58,3456,1234,admin systemu
+wojciech:Wojciech Łękawski,58,123456,789456,admin baz danych
+\end{verbatim}
+\end{enumerate}
+Domyślnym ogranicznikiem dla cut jest tabulator i nie trzeba go podawać. Piszemy np.: \textbf{cut -f1,5 listapwd}. Jeśli jednak zajdzie taka potrzeba, można to zrobić na dwa sposoby:\newline
+\end{enumerate}
+\item{Ctrl-v + Tab, np.: \textbf{cut -f2 -d'   ' infile}}
+\item{lub \textbf{cut -f2 -d$'\t' infile}}.
+\end{enumerate}
+Gotowiec wycinający z wyników *.txt Moodle'a:\textbf{grep January wyniki_quiz57_11 | tr -s ' ' | cut -f 1,5 > wynik_class3u57_11}.
+\section{Uruchamianie poleceń w tle\footnote{\url{http://stackoverflow.com/questions/8164664/running-a-command-as-a-background-process-service}}}
+
+UNIX(-like) system może obsłużyć jednocześnie tyle procesów ile potrzeba, można zatem zawsze otworzyć nową zakładkę lub okno z shell'em. Czasem jednak, pracując na starym sprzęcie, lub mając inne ograniczenia, lub dla zbadania tej możliwości warto wiedzieć jak uruchomić proces w tle lub przenieść go tam i z powrotem.\newline
+Aby uruchomić proces w tle uruchamiamy go poleceniem:\newline
+$ proces \&
+\section{Różne takie z tekstem}
+Patrz \url{http://www.pixelbeat.org/cmdline\_pl\_PL.html}
+Patrz \url{http://www.nfire.eu/?m=articles&article_id=43} Dużo o \textit{sed} i \textit{AWK}.
+Tutaj omówię na przykładach kilka fantastycznych narzędzi, które okażą się przydatne w tych momentach w życiu gdy czas nagli bo ''już miało być zrobione ...''
+\subsection{tr}
+Program ten tłumaczy (przetwarza) i usuwa znaki czytane ze \textit{sdtin} na \textit{stdout}. Np. aby usunąć częstą zmorę redaktora -- wielokrotne spacje -- korzystamy z opcji \textbf{-s} \textit{ang. -s, --squeeze-repeats} co zastępuje każdy wielokrotny znak na jeden. Np. jeśli ktoś podrzuci nam tabelę z kolumnami rozdzielanymi spacjami w różnych ilościach (tak bywa!) możemy spróbować: \textbf{cat tabela.txt | tr -s ' ' | cut -d ' ' -f 4}
+\subsubsection{Zamiana ''\n'' na spację}
+\begin{verbatim}
+tr '\n' ' ' < input_filename
+\end{verbatim}
+or remove the newline characters entirely:
+\begin{verbatim}
+tr --delete '\n' < input.txt > output.txt
+\end{verbatim}
+\subsection{sed}
+Sed przedstawia się jako edytor wsadowy do podstawowych przekształceń tekstu pochodzącego z pliku lub potoku. Główna różnica pomiędzy Sed a innym edytorem polega na jednorazowym przebiegu Sed'a przez plik (potok) i na możliwości filtrowania tekstu w potoku.
+\subsubsection{Zamiana ''\_'' na spację}
+\begin{verbatim}
+cat spreadsheet\_test\_answer\_random \textbar sed 's// /g' \textbar pr -T3 > 3Tab_right
+\end{verbatim}
+\subsubsection{Zamiana ''\n'' na spację}  \footnote{\url{http://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed}}
+Powyższa komenda zamieni 'newline' na spacje. Wyjaśnienie:
+\begin enumerate
+{\item}Create a label via :a.
+{\item}Append the current and next line to the pattern space via N.
+{\item}If we are before the last line, branch to the created label $!ba ($! means not to do it on the last line as there should be one final newline).
+{\item}Finally the substitution replaces every newline with a space on the pattern space (which is the whole file).
+\end{enumerate}
+\subsection{Tekst w kolumnach}
+
+\begin{verbatim}
+cat spreadsheet\_test\_answer \textbar sort -R \textbar pr -T4 -W$COLUMNS
+\end{verbatim}
+Polecenie powyższe plik spread*swer rozsortowuje losowo ( -R) i wyświetla na ekranie w 4-ch kolumnach używając programu \textit{pr}\footnote{Paginate or columnate FILE(s) for printing.} \textbf{pr} potrafi np. wyświetlać text ''gazetowo'' czyli w równoległych kolumnach (opcja \textit{merge -m}).
+\subsection{sortowania\footnote{\url{http://www.computerhope.com/unix/usort.htm}}}
+
+Normalnie \textbf{sort} bierze pod uwagę całą linię porównując każdy znak od lewej do prawej. Jeśli mamy tekst w kolumnach, możemy określić, które pola mają być porównywane dzięki opcji \textbf{ -k}.
+Np. weźmy plik:
+\begin{verbatim}
+$ cat -n lista2Tb1 > lista2Tb1num 
+ 1	bdyga
+ 2	jblacha
+ 3	jblaszczyk
+ 4	kdomanski
+ 5	mberggrun
+ 6	mczernicki
+ 7	pglazewski
+ 8	sbak
+
+\end{verbatim}
+Aby listę nazwisk posortować wg. nazwisk odzielamy nazwiska od imion:\newline
+\begin{verbatim}
+cut -c2- lista2Tb1 | cat -n
+ 1	dyga
+ 2	blacha
+ 3	blaszczyk
+ 4	domanski
+ 5	berggrun
+ 6	czernicki
+ 7	glazewski
+ 8	bak
+\end{verbatim}
+Jeśli chcemy posortować wg 2-giej kolumny, korzystamy z polecenia:
+\textbf{sort -k2 lista2Tbnum}
+\subsection{\textbf{sort} i \textbf{join\footer{Related commands:\newline
+comm — Compare two sorted files line by line.\newline
+join — Join the lines of two files which share a common field of data.\newline
+uniq — Identify, and optionally filter out, repeated lines in a file.}} użyte razem}
+Bardzo użyteczne połączenie. Zwykle \textbf{join} łączy linie dwóch plików, których pola sobie odpowiadają tj. zawierają część wspólną (tutaj numerację) domyślnie oddzielone spacją (whitespace). Mamy dwa pliki \textit{lewy} i \textit{prawy}. Pierwszy zawiera:
+\begin{verbatim}
+1 b
+2 j
+3 j
+4 k
+5 m
+6 m
+7 p
+8 s
+\end{verbatim}
+...i drugi zawiera:
+\begin{verbatim}
+8 bak
+5 berggrun
+2 blacha
+3 blaszczyk
+6 czernicki
+4 domanski
+1 dyga
+7 glazewski
+\end{verbatim}
+Możliwe jest posortowanie i połączenie tych dwóch plików jednocześnie jedną komendą:
+\begin{verbatim}
+join <(sort file1.txt) <(sort file2.txt) #sortowanie wg. 1 kolumny w obu plikach
+\end{verbatim}
+Sortowanie wykonane jest dla obu nawiasów a ich wyjście przekierowane do \textbf{join}, które pobiera potok jako wejście dla pierwszego i drugiego argumentu; wynik:
+\begin{verbatim}
+1 b dyga
+2 j blacha
+3 j blaszczyk
+4 k domanski
+5 m berggrun
+6 m czernicki
+7 p glazewski
+8 s bak
+\end{verbatim}
+\subsection{algorytm lista nazwisk}
+\begin{enumerate}
+\item{odcięcie pierwszej kolumny i zapis do \textit{/tmp/1}: \texttt{cut -c1 lista2Tb1 > /tmp/1}}
+\item{odcięcie reszty i zapis do \textit{/tmp/2}: \texttt{cut -c2- lista2Tb1 \textbar cat -n > /tmp/2}}
+\item{ponowne połączenie ze spacją i zapis do \textit{/tmp/3}: \texttt{join /tmp/1 /tmp/2}}
+\item{sortowanie wg. 2-giej kolumny i numerowanie: \texttt{cat -n /tmp/3 \textbar sort -k2}}
+Podsumujmy\newline
+Aby z listy w postaci:
+\begin{verbatim}
+bdyga
+jblacha
+jblaszczyk
+kdomanski
+mberggrun
+mczernicki
+pglazewski
+sbak
+\end{verbatim}
+otrzymać postać:
+\begin{verbatim}
+s bak
+m berggrun
+j blacha
+j blaszczyk
+m czernicki
+k domanski
+b dyga
+p glazewski
+\end{verbatim}
+wykonujemy skrypt:
+\begin{verbatim}
+#/bin/bash
+#algorytm lista klasy
+cut -c1 lista2Tb1 > /tmp/1
+cut -c2- lista2Tb1 > /tmp/2
+paste -d ' ' /tmp/1 /tmp/2 > /tmp/3 #paste delimiter=space
+cat /tmp/3 | sort -k2 #sort wg. 2-giej kolumny
+\end{verbatim}
+\section{find}
+\subsection{Czym się różnią \textbf{mtime}, \textbf{ctime} i \textbf{atime}}
+\textbf{mtime} to czas modyfikacji pliku zmieniany zawsze po edycji pliku i/lub jego zapisie.\newline
+\textbf{ctime} to czas zmiany bazy \textit{inode} lub zmiany samego pliku. Jest zmieniany każdorazowo po zmianie atrybutów jak: właścieciel, uprawnienia, przeniesienia pliku do innego (filesystem) a także po zmianie zawartości.\newline
+\textbf{atime} to czas ''dotknięcia'' (access) pliku zmieniany gdy plik jest otwierany, listowany, sortowany itp. Np. gdy wykonywane są na nim operacje przez narzędzia takie jak: grep, sort, cat, head, tail itp.
+*biblio
+\url{https://pomoc.home.pl/baza-wiedzy/polecenia-bash-ktore-sluza-do-zarzadzania-plikami-na-serwerze/}
+\url{http://linuxcommand.org/lc3\_lts0090.php}
+\url{http://www.howtogeek.com/howto/29980/whats-the-difference-between-single-and-double-quotes-in-the-bash-shell/}
+\section{Prawa\footnote{Na podstawie:\url{http://en.wikipedia.org/wiki/File\_system\_permissions}\footnote{Patrz też:\url{http://www.ibm.com/developerworks/library/l-lpic1-v3-104-5/}}}}
+\subsection{ACL lista kontroli dostepu}
+Lista praw dotyczacych obiektu (plik, folder) określająca któremu użytkownikowi lub procesowi zezwala się i na jakie operacje. ACL także może zarządzać grupami i ich zależnością hierarchiczną. Linux (UNIX-like) spełnia wymagania POSIX i posiada prosty system zarządzania prawami do plików (Traditional UNIX permissions). Większość systemów UNIX-like wspiera w pewnym zakresie metodę ACL (NFSv4).
+\subsection{Traditional UNIX permissions}
+Prawa tu oparte są na trzech klasach użytkowników: \textit{user} właściciel, \textit{group} grupa i \textit{others} inni (pozostali, reszta świata). Gdy tworzony jest nowy plik, prawa do niego ustawiane są przez \textit{umask} maskę. 
+\subsubsection{Klasy użytkowników}
+Pliki i katalogi należą do \textit{user} (właściciel). Pliki i katalogi są przypisane do \textit{group} grupy, określonej przez klasę \textit{group}. Właściciel może należeć do \textit{group}. Użytkownicy nie będący właścicielami, ani członkami \textit{group} tworzą klasę \textit{others} (inni).\newline
+Prawa efektywne wynikają z klasy \textit{user}. Przykładowo, właściciel pliku ma prawa nadane klasie \textit{user} bez względu na prawa nadane \textit{group} lub innej.
+\subsubsection{Prawa opisane}
+UNIX-like stosują trzy szczególne prawa stosowane do każdej z klas:
+\begin{enumerate}
+\item{\textbf{read} (odczyt) zezwala na odczyt pliku. Gdy dotyczy katalogu, zezwala jedynie \textbf{czytać} nazwy plików w katalogu (listować je) lecz nie na dostęp do jakichkolwiek innych informacji o pliku jak: zawartość (treść), typ, wielkość, prawa, właściciel.}
+\item{\textbf{write} (zapis) zezwala na modyfikację pliku. Ustawione dla katalogu zezwala na zmianę plików w katalogu: ich tworzenie, usuwanie, zmianę nazwy.}
+\item{\textbf{execute} (wykonanie) zezwala na uruchomienie (skryptu); musi być ustawione dla skryptów. Ustawione dla katalogu zezwala na dostęp do zawartości pliku i meta info gdy znamy nazwę pliku, lecz nie na listowanie katalogu, chyba że także zezwala sie na odczyt \textbf{read}.}
+\end{enumerate}
+Jeśli prawa nie są ustawione, pozostają zabronione. W odróżnieniu od systemów bazujących na ACL prawa w UNIX-like nie są dziedziczone. Pliki utworzone wewnątrz katalogu nie muszą mieć tych samych praw jak katalog.
+\subsubsection{Zmiana praw przez setuid, setgui, sticky bit}
+Trzy dodatkowe tryby stosuje się do pliku lub katalogu nie do klasy.
+\begin{enumerate}
+\item{\textbf{set user ID} lub SUID. Uruchomienie pliku z ustawionym \textit{setuid} znaczy, że wykonywany proces przyjmie realny ID swojego właściciela. Tzn. skrypt będzie wykonywany jak gdyby uruchomił go właściciel. Umożliwia to wykonanie skryptu z prawami np. root przez innego użytkownika. Umożliwia użytkownikom stać się na chwilę root'em lub kimś innym.}
+\item{\textbf{set group ID} lub SGID. Gdy uruchamiany jest plik z \textit{setgid} proces przyjmie ID grupy nadany klasie \textbf{group}. Jeśli \textit{setgid} jest zastosowany do katalogu, nowe pliki i katalogi w nim utworzone dziedziczą grupę z tego katalogu.
+\item{\textbf{sticky bit} nazywany też \textit{Text mode}}. Ustawiany dla katalogu zabezpiecza przed zmianą nazwy, przeniesieniem lub usunięciem plików zawartych w tym katalogu, które należą do użytkowników innych niż wydający polecenie, nawet wtedy jeśli posiada on prawo pisania w tym katalogu. Jednak właściciel katalogu i superuser są z tego zwolnieni i będą mogli to uczynić.
+\end{enumerate}
+\subsection{Prywatna grupa użytkownika}
+Nasz Debian (i nie tylko on) wykracza poza tradycyjny model POSIX i dodaje dla każdego użytkownika grupę, do której należy tylko on. Oznacza to, że każdy jest jedynym członkiem swojej prywatnej grupy. Pozwla to na sosowanie maski \textit{umask} o wartości 002, co nie pozwala na zapis inym użytkownikom nowych plików do zwykłych katalogów, ponieważ takie pliki są przypisane do prywatnych grup tworzących je uzytkowników. Jednakowoż gdy potrzebne jest uwspólnieie plików administrator może: \begin{enumerate} \item{stworzyć grupę zawierającą potrzebnych uzytkowników} \item{stworzyć katalog zapisywalny przez tę grupę} i najważniejsze: \item{ustawić \textit{setgid} dla tego katalogu}. To pozwoli plikom tworzonym we wspólnym katalogu być przypisanym do tej samej grupy co katalog i maska 002 zapweni innym członkom grupy pisanie do tych plików. Dodatkowo warto dodać do nowego katalogu {\textbf{sticky bit}.
+\subsection{chmod\footnote{http://www.arturpyszczuk.pl/commands-chmod.html}}
+Opcja -c która jest podobna do opcji -v (verbose) znanej z większości poleceń systemowych (informowanie o dokonanych czynnościach), różni się tym, że informacje o dokonanych zmianach zostaną wyświetlone, jeśli prawa dostępu zostały zmienione (jeśli uprzednio były takie same, informacje nie zostaną wydrukowane).
+\subsection{Przykład z ACL}
+Rozważmy problem\footnote{na podstawie zadania z:\url{http://smurf.mimuw.edu.pl/book/export/html/84}}:\newline
+Jako root załóż katalog \textit{/home/public} i skonfiguruj dostęp następująco:
+\begin{enumerate}
+\item{admin ma wszelkie uprawnienia do katalogu \textit{/home/public} i jego zawartości;}
+\item{Grupa G1 ma prawo do odczytu plików, które powstaną w katalogu \textit{/home/public};}
+\item{Grupa G2 ma prawo do odczytu, wykonywania i modyfikacji plików, które powstaną w katalogu \textit{/home/public}, nie ma natomiast prawa do tworzenia nowych plików w tym katalogu;}
+\item{Pozostali nie mają żadnych praw do katalogu \textit{/home/public}.}
+\end{enumerate}
+Rozwiązanie (jako sudo):\newline
+\begin{verbatim}
+mkdir /home/public
+chown admin:G2 /home/public
+chmod 770 /home/public
+setfacl -m g:G1:r /home/public
+\end{verbatim}
+Aby ustawić, inne niż dla G2, prawa grupie G1 użyto polecenia \textbf{setfacl} - set file access control lists. Aby odczytać ustawione prawa użyto \textbf{getfacl}:
+\begin{verbatim
+getfacl /home/public
+getfacl: Removing leading '/' from absolute path names
+\# file: home/public
+\# owner: root
+\# group: root
+user::rwx
+group::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:G1:r-x
+default:group:G2:rwx
+default:mask::rwx
+default:other::---
+\end{verbatim}
+
+
+\section{Zabawy z ISO}
+\subsection{Montowanie ISO jako CD/DVD}
+\texttt{mkdir /mnt/iso\_image}
+\texttt{mount -t iso9660 -o loop image.iso /mnt/iso\_image}
+
+\subsection{Bootowalny USB-live z ISO}
+Dla miłośników suwania myszką rzecz załatwia program \textbf{UNetbootin} wymagający praw \textit{root}. Pozostaje:\begin{enumerate}
+\item{Ściągnąć potrzebny ISO image}
+\item{zweryfikować go wyliczając programem \textbf{md5sum} sumę kontrolną i porównać ją z podaną na stronie pobierania}
+\item{Użyć programu zapisując ISO na usb}
+\end{enumerate}
+Dla miłośników klawiatury (wykonujemy punkty 1 i 2 wymienione powyżej i dalej):
+\begin{enumerate}
+\item{Warto sprawdzić nazwę naszego flash--drive (usb). W tym celu monitorujemy wpis w \textit{/var/log/messages} lub \textit{/var/log/syslog}, który kernel doda po włożeniu flash--drive}: \texttt{sudo tail -f /var/log/messages}. Np. otrzymaliśmy, że nazwa pen--drive to \texttt{/dev/sdb} a pierwsza partycja to \texttt{/dev/sdb1}.
+\item{Odmontować flash--drive: \texttt{sudo umount /dev/sdb1}}
+\item{''Wejść'' na drive: \texttt{sudo fdisk /dev/sdb} (opcja)}
+\item{Wykonać file-system na drive: \texttt{sudo mkfs -t vfat /dev/sdb1}}
+\item{Użyj \textit{dd}: \texttt{dd if=file.iso of=/dev/sdb}. Jeśli image jest bootowalny, flash--drive też będzie.}
+\end{enumerate}
+Istotne jest ustawienie parametru "bs=". I tak wartości:
+
+bs=16384 - 1 godz. 5 min.
+bs=8192 - 1 godz. 7 min.
+bs=4096 - 1 godz. 7 min.
+bs=2048 - 6 godz. 53 min.
+
+kopiowanie dwóch identycznych dysków (dysk->dysk) o poj. 250GB.
+\subsection{CD/DVD}
+\begin{enumerate}
+\item{Kasowanie Re-Writable CD-ROM: \texttt{wodim dev=/dev/cdrw blank=fast}}
+\item{Zapis ISO na CD/DVD: \texttt{wodim dev=/dev/cdrw image.iso}; użyteczne opcje: -v, - dao (''disk at once'').}
+\end{enumerate}
+\section{Kasowanie ostatnich aktywności w Gnome\footnote{https://bbs.archlinux.org/viewtopic.php?id=116870}}
+\texttt{rm ~/.local/share/recently-used.xbel*}; np.: \textt{/home/navegante/.local/share/recently-used.xbel} i (jeśli konieczne) restart Gnome: \texttt{sudo /etc/init.d/gdm restart} lub \texttt{sudo killall gnome-panel}.
+\section{ssh ''po kluczach''}
+\url{http://www.nibyblog.pl/ssh-bezhaslowe-logowanie-czyli-autoryzacja-za-pomoca-klucza-dsa-1202.html}
+\section{Wszystko dostępne}
+\url{http://krzychu.info/czyli-wszystko-jest-jednym-dyskiem}
+
+\section{Automatyczna instalacja systemu (\texttt{preseeding})}
+Często w praktyce administratora pewnej liczby komputerów (biuro, pracownia szkolna) zachodzi konieczność reinstalacji na kilku z nich np. wskutek awarii. W praktyce też czas na wykonanie tych operacji jest bardzo ograniczony. Powstała zatem potrzeba zautomatyzowania całego procesu. Jak widzieliśmy proces instalacji sprowadza się do ścisłych odpowiedzi na pytania, które precyzują typ przyszłej maszyny i zakres instalowanego oprogramowania. Można więc stworzyć plik (\texttt{seed}) opisujący te wymagania i podać go instalatorowi do czytania podczas instalacji. Opis metody w dokumentacji Debiana:\footnote{https://www.debian.org/releases/stable/amd64/apbs02.html.en}. Przykładowy plik opisujący:\footnote{https://www.debian.org/releases/stable/amd64/apbs04.html.en}
+\subsection{Instalacja po sieci z użyciem ssh i pliku seed}
+\section{Sieć. ''The Network Is The Computer'' SUN Microsystems' motto}
+\subsection{sshfs i fuse}
+\begin{verbatim}
+# apt-get install sshfs
+# apt-get install fuse
+# usermod -a -G fuse <username> (niepotrzebne w Debian8?)
+# modprobe fuse
+mkdir ~/mountpoint
+sshfs login@10.0.2.186: ~/mountpoint
+\end{verbatim}
+\subsection{Firewall}
+Ponieważ konfiguracja \textit{iptables}, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu \textit{ufw}. \texttt{Uncomplicated Firewall} w pełni zasługuje na swą nazwę. Oto na niego przepis:\footnote{\url{http://www.tecmint.com/how-to-install-and-configure-ufw-firewall/}}
+\subsection{Skanowanie portów}
+\subsubsection{Netcat}
+Po wstępnej konfiguracji firewalla wypada sprawdzić jak przedstawia się nasz PC dla sieci. Najpierw użyjemy narzędzia \textt{Netcat}\footnote{patrz: man netcat -- netcat is a simple unix utility which reads and writes data across network connections, using TCP or UDP protocol. It is designed to be a reliable "back-end" tool that can be used directly or easily driven by other programs and scripts. At the same time, it is a feature- rich network debugging and exploration tool, since it can create almost any kind of connec‐ tion you would need and has several interesting built-in capabilities. Netcat, or "nc" as the actual program is named, should have been supplied long ago as another one of those cryptic but standard Unix tools.}
+Parametr '-z' uruchamia program w trybie skanowania, parametr '-v' zwróci nam wyniki. Sprawdźmy zatem, które porty z zakresu od 1 do 1000 są otwarte:
+\begin{verbatim}
+$ nc -v -z localhost 1-1000
+localhost [127.0.0.1] 631 (ipp) open
+localhost [127.0.0.1] 111 (sunrpc) open
+localhost [127.0.0.1] 25 (smtp) open
+localhost [127.0.0.1] 22 (ssh) open
+\end{verbatim}
+Jak widać otwarte są porty dla: Simple Mail Transfer Protocol (SMTP) do przesyłania poczty elektronicznej, The Internet Printing Protocol (IPP), internetowy protokół do komunikacji między klientem a print serverem; pozwala klientom wysyłać jeden lub wiele zleceń druku  do serwera i wykonywać zadania administracyjne jak: odpytanie ststusu drukarki, statusu zleconych wydruków, usuwania zleceń wydruku; i tajemniczy \texttt{sunrpc} port 111, za którym chowa się RCP.* Jest definiowany jako ''converts RPC program numbers into universal addresses''. \footnote{\url{http://www.tldp.org/LDP/nag/node128.html}}
+
+\subsection{CUPS -- Common Unix Printing System}
+Modularny system druku dla Unix-like systemów operacyjnych, który pozwala stacji stać się serverem wydruku. Na wszystkich systemach CUPS-em zarządza się poprzez przeglądarkę na porcie 631 (np. \textit{http://localhost:631})\footnote{\url{https://en.wikipedia.org/wiki/CUPS}}.
+\subsection{LDAP -- Lightweight Directory Access Protocol}
+\url{http://www.tldp.org/HOWTO/LDAP-HOWTO/}
+\url{https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-a-basic-ldap-server-on-an-ubuntu-12-04-vps}
+\subsection{Avahi -- free zero-configuration networking (zeroconf) implementation}
+\url{https://en.wikipedia.org/wiki/Avahi_(software)}
+
+\section{Zmory admina}
+\subsection{Zbędne usługi są zbędne}
+\url{http://www.linuxbrigade.com/turn-off-unneeded-services-on-your-linux-machine/}
+\subsection{praca z \textbf{Git} (GitHub)}
+Gigantyczne repozytorium.
+\begin{verbatim}
+ 1999  git init
+ 2006  git config --global user.email "zs37bojanowski@gmail.com"
+ 2007  git config --global user.name "zs37bojanowski"
+ 2009  git remote add origin https://github.com/zs37bojanowski/nskrypt.git
+ 2015  git commit -m "add ~/Documents/Technikum/nskrypt.tex"
+ 2016  git add ~/Documents/Technikum/nskrypt.tex
+ 2017  git commit -m "add ~/Documents/Technikum/nskrypt.tex"
+ 2018  git push -u origin master
+\end{verbatim}
+\subsection{Antywirus ClamAV}
+Przekoania o dużej odoorności systemu na złośliwe oprogramowanie wynikają przede wszystkim z jego otwartości i możliwości weryfikacji podejrzanego kodu przez każdego. Istnieją oczywiście także programy takie jak ClamAV \url{www.clamav.net}. Dobra dokumentacja w stylu 'howto' jest tutaj: \url{http://askubuntu.com/questions/250290/how-do-i-scan-for-viruses-with-clamav}. Dokładniejsza tutaj: \url{http://linux.die.net/man/1/clamscan} lub tutaj: \url{https://wiki.archlinux.org/index.php/ClamAV}; przykład z \textit{cron}: \url{https://raymii.org/s/tutorials/ClamAV.html}; przykład z raportowaniem: \url{https://www.howtoforge.com/tutorial/configure-clamav-to-scan-and-notify-virus-and-malware/}. Also interesting: \url{http://www.digitalsanctuary.com/tech-blog/debian/automated-clamav-virus-scanning.html}
+\subsection{Kto jest kim: The Four Different Schemes for Persistent Naming}
+Persistent device naming for block devices has been made possible by the introduction of udev and has some advantages over the use of traditional bus-based names such as \texttt{/dev/hda1} or \texttt{/dev/sda2}.
+
+While Linux distributions and \texttt{udev} are evolving and hardware detection is becoming more reliable, there are also a number of new problems and changes:
+
+ If you have more than one disk controller (IDE or especially SCSI/SATA), or even if you just have variable numbers of removable USB/firewire storage devices attached from day to day, the order in which they are detected may not be deterministic. The result is that device names like /dev/sda1 and /dev/sdb1 may switch around randomly on each boot. Persistent naming allows you not to worry about this at all.
+
+ For machines with IDE controllers (including for instance machines with all-SATA hard drives and just one IDE cdrom drive), the switch to a standard Squeeze kernel may cause trouble: with the introduction of the new libata PATA support, your IDE hdX devices will become sdX devices. Again, if you have persistent naming in place, you won't even notice. (The postinst for the package linux-base includes code to assist with the changeover, but it makes sense to get it sorted out and verified as working in advance.)
+
+ Big machines, with many fast CPUs, and many Fiber Channel Host Bus Adapters, variable load/latency FC switches, SCSI controllers, and/or high-performance network cards, may have asynchronous timing issues when dealing with udev and multipath I/O, with almost unpredictable device detection order and automatic assignment of names during boot. 
+\footnote{\url{https://wiki.debian.org/Part-UUID}}
+\subsection{Klonowanie dysku, partycji, MBR}
+Wartościowy artykuł: \url{https://wiki.archlinux.org/index.php/Disk\_cloning#Cloning\_a\_partition}.
+\subsubsection{Zero miejsca na dysku}
+Awarie zdarzają się nawet zaawansowanym administratorom. Cron wykonał backup, który zajął całe pozostałe miejsce na dysku. Ważne by wiedzieć jak sobie radzić:
+\begin{enumerate}
+\item{Dodanie kolejnego fizycznego dysku}
+\item{Partycjonowanie}
+Listujemy zawartość partycji \textbf{fdisk -l}. Musimy mieć pewność, które urządzenie np.: \textbf{/dev/sda}, zawiera nasze cenne dane. W razie niepewności: procedura sprawdzenia \textbf{disk id}. Usuwamy zbędne partycje, zakładamy jedną nową \textit{primary}. 
+\item{Formatowanie}
+Nową partycję formatujemy, np.: \textbf{mkfs.ext3 /dev/sdb1} gdzie 1 to nr. naszej jedynej \textit{primary}.
+\item{Punkt montowania}
+Tworzymy punkt montowania na serwerze, tam gdzie chcemy mieć nowy backup, np.: \textbf{mkdir /backup_nowy}.
+\item{Zamontowanie}
+Montujemy nową partycję w nowym punkcie montowania: \textbf{mount -t ext3 /dev/sda1 /backup_nowy}.
+\item{Przeniesienie backupu}
+Już możemy korzystać z nowej przestrzeni. Przenosimy backup \textbf{mv /var/backups/backup.tgz /backup_nowy} (Trochę potrwa!). Sprawdzamy zajętość dysku serwera: \textbf{df -h /} i jeśli wynik jest podobny:
+\begin{verbatim}
+root@fileserver ~# df -h /          
+Filesystem                                              Size  Used Avail Use% Mounted on
+/dev/disk/by-uuid/7c7d7d3b-462c-4835-b1dd-36cd95ba31de  228G  156G   61G  73% /
+\end{verbatim}
+to możemy odetchnąć. Na chwilę.
+\item{Wpis do \textbf{fstab}}
+Aby proces montowania nowego zasobu po restarcie był automatyczny trzeba dokonać wpisu do \textit{fstab}. Korzystamy z lini opisującej ''/'' jako wzorca \footnote{https://wiki.debian.org/fstab}. W przykładzie użyto standardu \textit{Universally Unique Identifier}. Poleceniem \text{# blkid} można zawsze sprawdzić jak nazwane są dyski w naszym systemie. Można także użyć odmiany \textit{ls}: \textbf{$ ls -l /dev/disk/by-uuid/}
+\begin{verbatim}
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+proc            /proc           proc    nodev,noexec,nosuid 0       0
+# / was on /dev/sda1 during installation
+UUID=7c7d7d3b-462c-4835-b1dd-36cd95ba31de /               ext4    errors=remount-ro 0       1
+# swap was on /dev/sda5 during installation
+UUID=fe3eddfe-f70c-4d0a-895b-a66ecf98127e none            swap    sw              0       0
+# /backup_160
+UUID=b49ea59b-ce0c-4a72-8b76-36f68783a733 /backup_160	ext3	errors=remount-ro 0       1
+
+\end{verbatim}
+
+\item{klonowanie z serwera ssh}
+Klonowanie jest mozliwe także po sieci. Jeśli do serwera ssh mamy podłączony dysk wzorcowy lub mamy na nim \textit{image} to możemy klonować  ten zasób z serwera tak (przykład bez \textit{gzip}):
+\begin{verbatim}
+ssh root@ipserver "dd if=/dev/sdc" | pv | of=/dev/sda bs=65536
+\end{verbatim}
+Opcję \textbf{pv} można pominąć -- wskazuje ona postęp klonowania (\textit{Monitor progress of data sent via a pipe})\footnote{http://www.cyberciti.biz/open-source/command-line-hacks/pv-command-examples/}.
+\item{Edycja \textbf{crontab}}
+\begin{verbatim}
+# m h  dom mon dow   command
+50 16,15 * * 1-5 tar -zcf /backup_160/home.tgz /home/ &2 >> /backup_160/bledy_backup
+#20 11 * * 1-5 tar -zcf /backup_160/home1.tgz /home/ &2 >> /backup_160/bledy_backup1
+0 17 * * 1-5 /sbin/shutdown -h now
+\end{verbatim}
+
+
+
+\subsection{The difference between “s” and “S” in \textit{ls -la}}
+
+
+The documentation of the \textit{ls} command answers these questions. On most unix variants, look up the ls man page (man ls or online). On Linux, look up the Info documentation (info ls) or online.
+
+The letter s denotes that the setuid (or setgid, depending on the column) bit is set. When an executable is setuid, it runs as the user who owns the executable file instead of the user who invoked the program. The letter s replaces the letter x. It's possible for a file to be setuid but not executable; this is denoted by S, where the capital S alerts you that this setting is probably wrong because the setuid bit is (almost always) useless if the file is not executable.
+
+The number after the permissions is the hard link count. A hard link is a path to a file (a name, in other words). Most files have a single path, but you can make more with the ln command. (This is different from symbolic links: a symbolic link says “oh, actually, this file is elsewhere, go to <location>”.) Directories have N+2 hard links where N is the number of subdirectories, because they can be accessed from their parent, from themselves (through the . entry), and from each subdirectory (through the .. entry).
+
+\footnote{http://unix.stackexchange.com/questions/28363/whats-the-difference-between-s-and-s-in-ls-la}
+\subsection{Reset hasła roota}
+ Method 1
+\begin{enumerate}
+\item{Boot into grub, select single user but do not press enter.}
+\item{Press e to go into edit mode.}
+\item{Scroll down to the kernel line, it starts with "linux /boot/vmlinuz-2.6……."}
+\item{Scroll to the end of that line and press space key once and type \textbf{init=/bin/bash}}
+\item{Press Ctrl X to boot}
+%# Remount / as Read/Write 
+%mount -rw -o remount /
+\item{Change password with \textbf{passwd}}
+\item{type new password, confirm and hit enter and then reboot.}
+\end{enumerate}
+\subsection{Czyszczenie Master Boot Record}
+A master boot record (MBR) is the 512-byte boot sector that is the first sector of a partitioned data storage device of a hard disk.\newline
+Understanding MBR size\newline
+The mbr size is as follows in bytes:
+\begin{enumerate}
+\item{446 bytes - Bootstrap.}
+\item{64 bytes - Partition table.}
+\item{2 bytes - Signature.}
+\end{enumerate}
+\subsubsection{Option 1: Command to delete mbr including all partitions}
+Open a terminal and type the following command command to delete everything:\newline
+\textbf{\# dd if=/dev/zero of=/dev/sdc bs=512 count=1}
+\begin{verbatim}
+Sample outputs:
+1+0 records in
+1+0 records out
+512 bytes (512 B) copied, 0.00308483 s, 166 kB/s
+\end{verbatim}
+Where,\newline
+ if=/dev/zero - Read data from /dev/zero and write it to /dev/sdc.\newline
+ of=/dev/sdc - /dev/sdc is the USB drive to remove the MBR including all partitions.\newline
+ bs=512 - Read from /dev/zero and write to /dev/sdc up to 512 BYTES bytes at a time.\newline
+ count=1 - Copy only 1 BLOCK input blocks.\newline
+
+\subsubsection{Option 2: Command to delete \textbf{mbr} only}
+
+The following command will erase \textbf{mbr}, but not your partitions:
+\begin{verbatim}
+# dd if=/dev/zero of=/dev/sdc bs=446 count=1
+\end{verbatim}
+Where,\newline
+
+ bs=446 - Read from /dev/zero and write to /dev/sdc up to 446 BYTES bytes at a time.\newline
+
+\subsection{Usunięty katalog domowy}
+W środowisku graficznym \textbf{Gnome} zdarza się (raczej złośliwe) usunięcie domyślnych katalogów: \textit{Home Folder, Desktop, Documents, Pictures, Downloads}. Skutkiem jest niemożność zalogowania się do środowiska graficznego i dla większości użytkowników oznacza to katastrofę. Jest łatwa metoda odbudowania tych katalogów:
+\begin{verbatim}
+# mkhomedir_helper username
+\end{verbatim}
+Aby zadziałało katalog \textit{/home/username nie może istnieć}.
+
+\footnote{https://www.debian.org/releases/stable/amd64/ch06s03.html.en\#network-console}
+\section{Dużo pomocy}
+\subsection{Bezpieczeństwo systemu\footnote{\url{https://www.debian.org/doc/manuals/securing-debian-howto/index.en.html#contents}}}
+\subsection{Instalacja *.deb w konsoli}
+Nieco trudniejszy dla początkujących sposób to instalacja w konsoli. Tylko tak można instalować na starych PC bez grafiki i dzięki temu można automatyzować procesy instalacji wielu plików. Instalujemy poleceniem:\newline
+ \textttt{sudo dpkg -i plik.deb}
+
+Opcja -i oznacza, że wybrany pakiet będziemy instalować, a inne znaczą:\newline
+\begin{enumerate)
+\item{-r - usuwanie pakietu}
+\item{-s - wyświetlić stan pakietu}
+\item{--reconfigure ponownej konfiguracji pakietu}
+
+\section{Testowanie}
+Spróbujmy sami mocy Phoronixa i przechodząc do działu Downloads ściągnijmy ostatnią stabilną paczkę \texttt{.deb}. Uruchamiamy za pomocą \texttt{GDebi Package Installer}. Po instalacji w menu Sytem Tools jest dostępny Phoronix Test Suite.\newline
+Można skonfigurować system do pracy z systemem Phoromatic poprzez uruchomienie skryptu: \texttt{.phoronix-test-suite/user-config.xml}. Phoromatic umożliwia ... Istnieje wersja live systemu Linux, dystrybucja PTS Desktop Live. Pomoc otrzymamy poleceniem \texttt{phoronix-test-suite help}.
+\footnote{http://www.phoronix-test-suite.com/?k=home}
+\footnote{http://www.phoronix-test-suite.com/?k=downloads}
+\footnote{http://wazniak.mimuw.edu.pl/index.php?title=\%C5\%9Arodowisko\_programisty/Bash\_-\_podstawowe\_komendy}
+
+\section{Lekkie menadżery grafiki}
+Standardowa instalacja Linuxa oferuje w zasadzie jedeno z dwóch konkurencyjnych środowisk pracy - menadzerów grafiki: Gnome lub KDE. Oba są dość zzasobożerne i szczegolnie na słabszych maszynach mogą ograniczać komfort pracy. Warto zatem zainteresować się liczną grupą tzw. lekkich środowisk graficznych.
+\subsection{Składniki}
+\subsection{Minimalna instalacja}
+Skrypt instalujący miinimum:
+\begin{verbatim}
+#!/bin/bash
+#instaluje minimum dla xwindows
+apt-get install --no-install-recommends xserver-xorg-core \
+xserver-xorg-input-all xserver-xorg-video-fbdev \
+xserver-xorg-video-intel#lub inne np. ati ...
+\end{verbatim}
+\subsection{Zmiana domyślnego menadzera okien}
+X Window System jest uruchamiany poleceniem \texttt{startx} gdzie umieszczone są zmienne, wykonywane ewentualne zadania właściwe danemu systemowi i wywołany zostaje \texttt{xinit}. Przyjrzyjmy się zatem jego zawartości.
+\footnote{\url{http://xwinman.org/basics.php}}
+\section{Hardware}
+Aby dowiedzieć się na czym pracujemy: typ procesora itp.: \url{http://www.binarytides.com/linux-cpu-information/}, pamięć: \url{http://www.binarytides.com/linux-command-check-memory-usage/}, typ systemu: \url{https://linuxconfig.org/check-what-debian-version-you-are-running-on-your-linux-system}, architektura: \url{http://www.howtogeek.com/198615/how-to-check-if-your-linux-system-is-32-bit-or-64-bit/}.
+\section{VNC}
+\subsection{serwer}
+\begin{verbatim}
+   54  apt-get install vnc4server
+   55  vnc4password
+   56  vnc4passwd
+   57  vnc4server -geometry 800x600 -depth 24
+\end{verbatim}
+\subsection{klient}
+\begin{verbatim}
+xvnc4viewer 192.168.0.22:1
+\end{verbatim}
+\section{SLES}
+To klikany Linux. Klikacze zadowoleni. Męczący, uciążliwy. Wadą tego rozwiązania jest niewygoda pracy i konieczność ciągłego przeglądania wzrokiem podobnych okienek. Zaletą, że niewprawnego użytkownika prowdzi za rączkę (niestety często na manowce), posiada ładną dokumentację, która przemilcza kluczowe momenty konfiguracji. Wniosek: jeśli nie musisz -- nie używaj.
+Zamiast umieszczać ulubione przez windowsiaków zrzuty ekranów, umieszczam zawartość plików konfiguacyjnych dostępnych w SLES z shella jak w każdym linuxie.
+\subsection{sshfs}
+Zanim przystąpimy do prób warto posiadać łączność z naszym SLES po ssh. Nie jest to potrzebne gdy uzywamy wirtialnego systemu i widzimy go na własnym desktopie.
+\subsubsection{Uzyskanie dostępu po ssh}
+Pamiętaj, że domyślnie serwer ssh nie zezwala na zdalne połączenie dla konta roota.
+Często zdarza się, że po zmianach parametrów takich jak: podsieć, nr. ip, login przy próbie połączenia otrzymamy niemiły komunikat: \textit{Warning: Remote Host Identification Has Changed! Offending key: \textbf{jakaś liczba tutaj}} \footnote{\url{http://www.thegeekstuff.com/2010/04/how-to-fix-offending-key-in-sshknown_hosts-file/}}.\newline
+Usuń błędny wpis poleceniem: \textbf{sed -i 'jakaś liczba tutaj' ssh/known_hosts}.
+\begin{enumerate}
+\item{w shellu: yast2 firewall}
+Otwieramy port na Firewall:
+\item{Allowed services: Service to Allow: Secure Shell Server: OK}
+\end{enumerate}
+\subsection{Serwer DHCP}
+\subsubsection{/etc/dhcpd.conf}
+\begin{verbatim}
+\end{verbatim}
+ 
+
+
+\section{VirtualBox}
+\subsection{Klonowanie uprzednio uruchomionych systemów komputerowych (SK) pomiędzy kolejnymi hostami (pracownia komputerowa)}
+W Oracle VirtualBox isnieje pojęcie \textit{appliance} oznaczające gotowy, działający SK, który możemy rozmnożyć. W tym celu polecamy: \textbf{Export Appliance}. Maszyna musi być wyłączona lub zapisana (saved). VB ślicznie zapisuje nam SK w jednym pliku \textbf{*.ova}. Plik ten kopiujemy na server, z którego rozmnażamy tyle SK ile dusza zapragnie. Uruchamiamy uprzednio importując poleceniem \textbf{Import Appliance} i ... błąd (wstaw foto). Oczywiście w dokumentacji nic nie znajdujemy :)\newline
+Jak można się zorientować, błąd dotyczy nowego (innego) idetyfikatora \textit{uuid} jaki posiada sklonowany SK w nowym (innym) VB na nowym (innym) hoście. Jeśli zmienimy \textit{uuid} na oryginalny -- sklonowany SK powinien się podnosić.
+subsubsection{Metoda ogólna}
+\begin{enumerate}
+\item{\url{http://superuser.com/questions/432358/unable-to-use-cloned-vm-opensuse-virtualbox}}
+\item{\url{http://diggerpage.blogspot.com/2011/11/cannot-boot-opensuse-12-after-cloning.html}}
+\end{enumerate}
+\subsubsection{Procedura odzyskania \textit{uuid}}
+(tu dać link do {Wpis do \textbf{fstab}} linia 862)
+\begin{enumerate}
+\item{Uruchamiamy system w trybie \textit{"Failsafe"}}
+\item{Polecenie \textbf{blkid}} pokazuje nam \textit{uuid} dysków w naszym SK. Z tym identyfikatorem powinien być zgodny ten w \textbf{/boot/grub/menu.lst} sklonowanego SK. \item{Poprawa wpisu w \textbf{/boot/grub/menu.lst}} Konieczna jest poprawa tylko wpisu w części pierwszej zatytułowanej \textit{"SUSE Linux Enterprise Server"}; warto uczynić ją także w drugiej zatytułowanej \textit{"Failsafe"} na wszelki wypadek. 
+\textbf{reboot} Teraz nowy (inny) SK powinien uruchomić się prawidłowo.
+
+
+\end{document}
