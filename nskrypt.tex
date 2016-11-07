@@ -11,7 +11,7 @@
 \usepackage{polski}
 \frenchspacing
 \usepackage{indentfirst}
-\title{\textsc{\huge{NSkrypt PSO/PSK}}}
+\title{\textsc{\huge{NSkrypt PSO/PSK/PLSK}}}
 \author{Adam Bojanowski}
 \date{15 stycznia 2015}
 %\selectlanguage{english}
@@ -24,8 +24,11 @@
 \usepackage{paralist}
 \pagestyle{headings}%{empty}
 \usepackage[breaklinks]{hyperref}
+\usepackage{graphicx}
 \AtBeginDocument{\let\textlabel\label}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
 \begin{document}
+\graphicspath{ {/home/navegante/SLES/} }
 %\textbf{biblia:}
 %\url{http://tldp.org/LDP/intro-linux/html/}\newline
 %\url{http://www.tldp.org/LDP/Bash-Beginners-Guide/html/Bash-Beginners-Guide.html}
@@ -554,7 +557,8 @@ Powyższa komenda zamieni 'newline' na spacje. Wyjaśnienie:
 cat spreadsheet\_test\_answer \textbar sort -R \textbar pr -T4 -W$COLUMNS
 \end{verbatim}
 Polecenie powyższe plik spread*swer rozsortowuje losowo ( -R) i wyświetla na ekranie w 4-ch kolumnach używając programu \textit{pr}\footnote{Paginate or columnate FILE(s) for printing.} \textbf{pr} potrafi np. wyświetlać text ''gazetowo'' czyli w równoległych kolumnach (opcja \textit{merge -m}).
-\subsection{sortowania\footnote{\url{http://www.computerhope.com/unix/usort.htm}}}
+\subsection{sortowania}
+\footnote{\url{http://www.computerhope.com/unix/usort.htm}}
 
 Normalnie \textbf{sort} bierze pod uwagę całą linię porównując każdy znak od lewej do prawej. Jeśli mamy tekst w kolumnach, możemy określić, które pola mają być porównywane dzięki opcji \textbf{ -k}.
 Np. weźmy plik:
@@ -825,7 +829,7 @@ Gigantyczne repozytorium.
  2018  git push -u origin master
 \end{verbatim}
 \subsection{Antywirus ClamAV}
-Przekoania o dużej odoorności systemu na złośliwe oprogramowanie wynikają przede wszystkim z jego otwartości i możliwości weryfikacji podejrzanego kodu przez każdego. Istnieją oczywiście także programy takie jak ClamAV \url{www.clamav.net}. Dobra dokumentacja w stylu 'howto' jest tutaj: \url{http://askubuntu.com/questions/250290/how-do-i-scan-for-viruses-with-clamav}. Dokładniejsza tutaj: \url{http://linux.die.net/man/1/clamscan} lub tutaj: \url{https://wiki.archlinux.org/index.php/ClamAV}; przykład z \textit{cron}: \url{https://raymii.org/s/tutorials/ClamAV.html}; przykład z raportowaniem: \url{https://www.howtoforge.com/tutorial/configure-clamav-to-scan-and-notify-virus-and-malware/}. Also interesting: \url{http://www.digitalsanctuary.com/tech-blog/debian/automated-clamav-virus-scanning.html}
+Przekonanie o dużej odoorności systemu na złośliwe oprogramowanie wynika przede wszystkim z jego otwartości i możliwości weryfikacji podejrzanego kodu przez każdego. Istnieją oczywiście także programy takie jak ClamAV \url{www.clamav.net}. Dobra dokumentacja w stylu 'howto' jest tutaj: \url{http://askubuntu.com/questions/250290/how-do-i-scan-for-viruses-with-clamav}. Dokładniejsza tutaj: \url{http://linux.die.net/man/1/clamscan} lub tutaj: \url{https://wiki.archlinux.org/index.php/ClamAV}; przykład z \textit{cron}: \url{https://raymii.org/s/tutorials/ClamAV.html}; przykład z raportowaniem: \url{https://www.howtoforge.com/tutorial/configure-clamav-to-scan-and-notify-virus-and-malware/}. Also interesting: \url{http://www.digitalsanctuary.com/tech-blog/debian/automated-clamav-virus-scanning.html}
 \subsection{Kto jest kim: The Four Different Schemes for Persistent Naming}
 Persistent device naming for block devices has been made possible by the introduction of udev and has some advantages over the use of traditional bus-based names such as \texttt{/dev/hda1} or \texttt{/dev/sda2}.
 
@@ -1038,6 +1042,56 @@ subsubsection{Metoda ogólna}
 \item{Uruchamiamy system w trybie \textit{"Failsafe"}}
 \item{Polecenie \textbf{blkid}} pokazuje nam \textit{uuid} dysków w naszym SK. Z tym identyfikatorem powinien być zgodny ten w \textbf{/boot/grub/menu.lst} sklonowanego SK. \item{Poprawa wpisu w \textbf{/boot/grub/menu.lst}} Konieczna jest poprawa tylko wpisu w części pierwszej zatytułowanej \textit{"SUSE Linux Enterprise Server"}; warto uczynić ją także w drugiej zatytułowanej \textit{"Failsafe"} na wszelki wypadek. 
 \textbf{reboot} Teraz nowy (inny) SK powinien uruchomić się prawidłowo.
+\section{Proxy serwer}
+\section{Network Time Protocol Server}
+\subsection{Konfigurację zaczynamy oczywiście od serwera SLES}
+\begin{enumerate}
+\item{Poleceniem shella \textbf{yast2 ntp-client} rozpoczynamy konfigurację}
+\item{Wybieramy stosowny dla naszej lokalizacji publiczny serwer NTP}
+\item{Server -- edit -- Public NTP Server}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{wyborpublicznegoserwerantp}
+\caption{Wybór publicznego serwera NTP}
+\end{figure}
+
+\item{OK i Test}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{pozytywnytestpolinguntp}
+\caption{Pozytywny test polingu NTP}
+\end{figure}
+\item{Po poleceniu \textbf{service ntp stop} możemy uaktualnić czas na żądanie wg. znanego serwera ntp poleceniem \textbf{sntp -P no -r ntp.icm.edu.pl}}. Komenda \textbf{date} zwróci aktualny czas.
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{czasnazadanie}
+\caption{Czas na żądanie}
+\end{figure}
+\end{enumerate}
+Warto przejrzeć log naszego lokalnego serwera ntp pobierającego czas z zaufanego serwera w Sieci:
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{ntpserverlog}
+\caption{log serwera NTP}
+\end{figure}
+\subsection{Konfiguracja klienta SLES}
+\begin{enumerate}
+\item{konfiguracja \textit{/etc/ntp.conf}}
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{lientkonfiguracjantp}
+\caption{Konfiguracja pliku ntp.conf na kliencie}
+\end{figure}
+\item{wyłączenienie usługi ntp}
+\item{żądanie do lokalnego serwera}
+\item{przywrócenie usługi ntp}
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{komunikacjaklientazserweremntp}
+\caption{Komunikacja klienta z serwerem czasu}
+\end{figure}
+\end{enumerate}
 
 \end{document}
