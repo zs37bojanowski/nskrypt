@@ -105,7 +105,7 @@ Eventually, cellular phones and tablets started running Linux. A company, later 
 
 Aside from phones and tablets, Linux can be found in many consumer devices. Wireless routers often run Linux because it has a rich set of network features. The TiVo is a consumer digital video recorder built on Linux. Even though these devices have Linux at the core, the end users don’t have to know. The custom software interacts with the user and Linux provides the stable platform.
 \section{Zad. 1. PSO/PSK Przygotowanie systemu komputerowego do instalacji systemu operacyjnego}
-Wszystkie polecenia z pozycji roota:
+Założenia ogólne: wszystkie polecenia z pozycji roota.
 \begin{enumerate}
 \item{\textbf{fdisk -l}}
 \item{\textbf{fdisk /dev/sdb}\newline
@@ -145,6 +145,49 @@ Wykonanie ćw. 1 polegało na:
 Podczas wykonywania ćw. 1 na etapie 1 i 2 nie wystąpiły żadne problemy. Po formatowaniu partycja jednak nie pojawiła się - nie została zamontowana. Rozwiązano to tworząc nowy punkt montowania i zamontowano partycję w tym p-kcie. Po czym okazało się niemożliwe korzystanie z zasobu ze względu na prawa. Ustawiono tymczasowo pełny dostęp do zasobu.}
 \section{Zad. 2. PSO/PSK Zmiana rozmiaru istniejącej partycji w celu instalacji drugiego systemu operacyjnego}
 Wykonaj zadanie stosując polecenie \textbf{resize2fs -p /dev/part\_do\_zmiany}
+\subsection{Przykład rozwiązania Zad. 2 a) powiększanie partycji i systemu plików\footnote{\url{https://geekpeek.net/resize-filesystem-fdisk-resize2fs/}}}
+\begin{enumerate}
+\item{Masz na dysku /dev/sdb puste miejsce za partycją, którą planujesz zmienić}
+\textbf{df -h}
+\item{Odmontuj partycję, którą planujesz zmienić}
+\textbf{# umount /do_zmiany}
+\item{Usuń partycję, którą planowałeś zmienić}
+\textbf{# fdisk /dev/sdb; d; 1; p; w}
+Teraz usunąłeś partycję, którą planujesz zmienić.
+\item{Utwórz nową większą partycję, która obejmuje tę, którą planowałeś zmienić i wolne miejsce za nią}
+\textbf{# fdisk /dev/sdb; n; 1; p; w}
+Fdisk proponuje optymalne wartości, wystarczy zatwierdzać enterem. Jeśli nowa partycja ma być mniejsza niż suma obszaru obejmującego partycję, którą planowałeś zmienić i wolne miejsce za nią po kroku \textit{primary} podajesz stosowny rozmiar.
+\item{Sprawdź nową partycję}
+\textbf{# e2fsck -f /dev/sdb1}
+\item{Rozszerz system plików na nową partycję}
+\textbf{# resize2fs /dev/sdb1}
+\item{Zamontuj ponownie partycję}
+\textbf{# mount /dev/sdb1 /do_zmiany}
+\end{enumerate}
+Gotowe! Nowa partycja powinna zaiwerać dane poprzedniej mniejszej i dużo wolnego miejsca.
+\subsection{Przykład rozwiązania Zad. 2 b) zmniejszanie partycji i systemu plików z zachowaniem daych}
+\begin{enumerate}
+\item{Masz na dysku /dev/sdb partycję, którą planujesz zmniejszyć celem np. instalacji drugiego systemu operacyjnego}
+\textbf{df -h}
+\item{Odmontuj partycję, którą planujesz zmienić}
+\textbf{# umount /do_zmiany}
+\item{Sprawdź ją partycję}
+\textbf{# e2fsck -f /dev/sdb1}
+\item{Zmniejsz system plików na partycji}
+\textbf{# resize2fs /dev/sdb1}
+\item{Usuń partycję, którą planowałeś zmienić}
+\textbf{# fdisk /dev/sdb; d; 1; p; w}
+Teraz usunąłeś partycję, którą planujesz zmienić.
+\item{Utwórz nową mniejszą partycję, która obejmuje dokładnie taki rozmiar, jaki ma nowy system plików}
+Uwaga! Po kroku \textit{primary} podajesz stosowny rozmiar.
+\textbf{# fdisk /dev/sdb; n; 1; p; w}
+Fdisk proponuje optymalne wartości, wystarczy zatwierdzać enterem. Jeśli nowa partycja ma być mniejsza niż suma obszaru obejmującego partycję, którą planowałeś zmienić i wolne miejsce za nią po kroku \textit{primary} podajesz stosowny rozmiar.
+\item{Zamontuj ponownie partycję}
+\textbf{# mount /dev/sdb1 /do_zmiany}
+\item{Sprawdź zmiany}
+\textbf{# df -h}
+\end{enumerate}
+\footnote{Inne przydatne narzędzia do partycjonowania \url{http://www.binarytides.com/linux-command-check-disk-partitions/}}
 \section{Rozwiązywanie zadań}
 \subsection{Wzorcowy sposób rozwiązywania zadań -- przykład}
 \begin{enumerate}
@@ -1008,13 +1051,13 @@ xvnc4viewer 192.168.0.22:1
 \end{verbatim}
 \section{SLES}
 To klikany Linux. Klikacze zadowoleni. Męczący, uciążliwy. Wadą tego rozwiązania jest niewygoda pracy i konieczność ciągłego przeglądania wzrokiem podobnych okienek. Zaletą, że niewprawnego użytkownika prowdzi za rączkę (niestety często na manowce), posiada ładną dokumentację, która przemilcza kluczowe momenty konfiguracji. Wniosek: jeśli nie musisz -- nie używaj.
-Zamiast umieszczać ulubione przez windowsiaków zrzuty ekranów, umieszczam zawartość plików konfiguacyjnych dostępnych w SLES z shella jak w każdym linuxie.
+Poniżej zrzuty ekranów, oraz zawartość plików konfiguacyjnych dostępnych w SLES z shella jak w każdym linuxie.
 \subsection{sshfs}
 Zanim przystąpimy do prób warto posiadać łączność z naszym SLES po ssh. Nie jest to potrzebne gdy uzywamy wirtialnego systemu i widzimy go na własnym desktopie.
 \subsubsection{Uzyskanie dostępu po ssh}
 Pamiętaj, że domyślnie serwer ssh nie zezwala na zdalne połączenie dla konta roota.
 Często zdarza się, że po zmianach parametrów takich jak: podsieć, nr. ip, login przy próbie połączenia otrzymamy niemiły komunikat: \textit{Warning: Remote Host Identification Has Changed! Offending key: \textbf{jakaś liczba tutaj}} \footnote{\url{http://www.thegeekstuff.com/2010/04/how-to-fix-offending-key-in-sshknown_hosts-file/}}.\newline
-Usuń błędny wpis poleceniem: \textbf{sed -i 'jakaś liczba tutaj' ssh/known_hosts}.
+Usuń błędny wpis poleceniem: \textbf{sed -i 'jakaś liczba tutajd' ~/.ssh/known_hosts}.
 \begin{enumerate}
 \item{w shellu: yast2 firewall}
 Otwieramy port na Firewall:
