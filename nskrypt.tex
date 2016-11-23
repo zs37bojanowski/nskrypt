@@ -1081,6 +1081,9 @@ subsubsection{Metoda ogólna}
 \end{enumerate}
 \subsubsection{Procedura odzyskania \textit{uuid}}
 (tu dać link do {Wpis do \textbf{fstab}} linia 862)
+\subsubsection{Odzyskanie SLESa}
+Uruchom serwer w trybie \textit{Rescue System}. Aby to było możliwe musi być prawidłowo pokazane źródło, z którego system był ''instalowany''. Rescue login to \textit{root}; \textbf{cd /dev/disk/by-id}; definiujemy zmieną s (stara_nazwa)
+
 \begin{enumerate}
 \item{Uruchamiamy system w trybie \textit{"Failsafe"}}
 \item{Polecenie \textbf{blkid}} pokazuje nam \textit{uuid} dysków w naszym SK. Z tym identyfikatorem powinien być zgodny ten w \textbf{/boot/grub/menu.lst} sklonowanego SK. \item{Poprawa wpisu w \textbf{/boot/grub/menu.lst}} Konieczna jest poprawa tylko wpisu w części pierwszej zatytułowanej \textit{"SUSE Linux Enterprise Server"}; warto uczynić ją także w drugiej zatytułowanej \textit{"Failsafe"} na wszelki wypadek. 
@@ -1145,4 +1148,5 @@ Polecenie \textbf{hwinfo --short} pozwala uzyskać ogólne informacje.
 \subsection{inxi \footnote{\url{http://www.binarytides.com/inxi-system-information-linux/}}}
 \subsection{troubleshooting \footnote{\url{http://www.dedoimedo.com/computers/linux-hardware-troubleshooting.html}}}
 \subsubsection{dmesg}
+
 \end{document}
