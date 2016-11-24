@@ -580,6 +580,7 @@ or remove the newline characters entirely:
 \begin{verbatim}
 tr --delete '\n' < input.txt > output.txt
 \end{verbatim}
+lub inaczej \begin{verbatim} tr -s '\n' \end{verbatim}
 \subsection{sed}
 Sed przedstawia się jako edytor wsadowy do podstawowych przekształceń tekstu pochodzącego z pliku lub potoku. Główna różnica pomiędzy Sed a innym edytorem polega na jednorazowym przebiegu Sed'a przez plik (potok) i na możliwości filtrowania tekstu w potoku.
 \subsubsection{Zamiana ''\_'' na spację}
@@ -594,8 +595,24 @@ Powyższa komenda zamieni 'newline' na spacje. Wyjaśnienie:
 {\item}If we are before the last line, branch to the created label $!ba ($! means not to do it on the last line as there should be one final newline).
 {\item}Finally the substitution replaces every newline with a space on the pattern space (which is the whole file).
 \end{enumerate}
+\subsubsection{Formatowanie tekstu - przykłady}
+\begin{verbatim}
+#!/bin/bash
+#to nicely format e-mails for text-only
+read -p 'filename: ' filename
+fold -s -w 78 $filename | sed 's/^.*$/> &/' > $filename"OK"
+echo "Zapisałem jako" $filename"OK"
+\end{verbatim}
+\begin{verbatim}
+#!/bin/bash
+#to nicely format text-only for 80 chars in line (indents one white character for better printout)
+read -p 'filename: ' filename
+#tr -s '\n ' # removes repeated line endings preceeded with one space
+#zawija linie po 75 znakach
+fold -s -w 75 $filename | tr -s ' \n' | sed 's/^.*$/ &/' > $filename"f-matted"
+echo "Zapisałem jako" $filename"f-matted"
 \subsection{Tekst w kolumnach}
-
+\end{verbatim}
 \begin{verbatim}
 cat spreadsheet\_test\_answer \textbar sort -R \textbar pr -T4 -W$COLUMNS
 \end{verbatim}
