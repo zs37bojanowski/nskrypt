@@ -566,7 +566,7 @@ Gotowiec wycinający z wyników *.txt Moodle'a:\textbf{grep January wyniki_quiz5
 UNIX(-like) system może obsłużyć jednocześnie tyle procesów ile potrzeba, można zatem zawsze otworzyć nową zakładkę lub okno z shell'em. Czasem jednak, pracując na starym sprzęcie, lub mając inne ograniczenia, lub dla zbadania tej możliwości warto wiedzieć jak uruchomić proces w tle lub przenieść go tam i z powrotem.\newline
 Aby uruchomić proces w tle uruchamiamy go poleceniem:\newline
 $ proces \&
-\section{Różne takie z tekstem}
+\section{Różne takie z tekstem \foootnote{Najpierw przeczytaj to:\url{http://www.tldp.org/LDP/abs/html/textproc.html}}}
 Patrz \url{http://www.pixelbeat.org/cmdline\_pl\_PL.html}
 Patrz \url{http://www.nfire.eu/?m=articles&article_id=43} Dużo o \textit{sed} i \textit{AWK}.
 Tutaj omówię na przykładach kilka fantastycznych narzędzi, które okażą się przydatne w tych momentach w życiu gdy czas nagli bo ''już miało być zrobione ...''
@@ -597,6 +597,8 @@ Powyższa komenda zamieni 'newline' na spacje. Wyjaśnienie:
 \end{enumerate}
 \subsubsection{Formatowanie tekstu - przykłady}
 \begin{verbatim}
+#przygotowanie pliku do druku programem pr
+pr -o 2 --width=70 rsync_backups.txt > rsync_backups_prt.txt
 #!/bin/bash
 #to nicely format e-mails for text-only
 read -p 'filename: ' filename
@@ -1167,4 +1169,6 @@ Polecenie \textbf{hwinfo --short} pozwala uzyskać ogólne informacje.
 \subsubsection{dmesg}
 \section{backup}
 Backup jest niezbędny. Jednym ze sposobów pełnego backupu jest przykład podany w helpie do \textbf{crontab} z zastosowaniem \textbf{tar}. Backup różnicowy może być wykonany poleceniem \textbf{# rsync -avzh /home/ /var/backups/}. Więcej o strategiach backupu tutaj: \footnote{\url{http://searchdatabackup.techtarget.com/feature/Full-incremental-or-differential-How-to-choose-the-correct-backup-type}} i tutaj: \footnote{\url{http://www.mikerubel.org/computers/rsync_snapshots/}}.
+Przykład praktyczny kopiowania zdjęć na zdalny serwer:\textbf{rsync -avz --progress -e ssh */ student@192.168.0.22:/home/BIG/foto/}
+
 \end{document}
