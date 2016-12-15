@@ -1176,5 +1176,22 @@ Przykład praktyczny kopiowania zdjęć na zdalny serwer:\textbf{rsync -avz --pr
 Przykład instalacji: \textit{sudo apt-get install zsync}; przykład polecenia: \textit{zsync http://www.linuxcnc.org/linuxcnc-2.7-wheezy.iso.zsync}.
 \subsection{Kopiowanie z informacją o postępie}
 Polecenie \textbf{cp} normalnie nie informuje o postępie i szybkości kopiowania. Można posłużyć się \textbf{pv}:\newline
-\textit{pv my_big_file > backup/my_big_file}
+\textit{pv my_big_file > backup/my_big_file} (na podstawie \footnote{\url{http://askubuntu.com/questions/17275/progress-and-speed-with-cp}}. \textbf{Uwaga!} Ta metoda usunie prawa do plików i info do kogo należą. Tak kopiowane pliki będą jakby utworzone przez kopiującego. Aby zachować info o prawach i właścicielstwie można użyć: \textit{rsync -ah --progress source-file destination}: \textbf{--prograss} to oczywiście linia postępu, \textbf{-a} zachowuje prawa, \textbf{-h} formatuje w czytelny sposób. (\textit{human readable}). Program \textbf{gcp} jest wyposażony w: indykator postępu, kontynuację po błędzie (skok do następnego pliku, log statusu.
+\subsubsection{Inne przykłady}
+\textit{curl -o destination FILE://source}\newline
+\textit{cp -rv old-directory new-directory}\newline
+\textbf{Nowoczesne rozwiązanie}
+Kernel zna wielkoości takie jak prędkość i postęp (/proc filesystem). Program \textbf{showspeed}  \footnote{\url{https://github.com/jnweiger/showspeed}} można dołączyć w ten sposób:
+\begin{verbatim}
+$ dd if=bigfile of=/tmp/otherbigfile &
+$ showspeed dd
+dd looks like a process name. pid=4417 matches av0=dd.
+p/4417/fd/0r /home/jw/bigfile 113MB/s (12%, 2.3GB)  9m:35
+p/4417/fd/1w /tmp/otherbigfile 182MB/s (2.6GB)
+p/4417/fd/0r /home/jw/bigfile 285MB/s (15%, 3.0GB)  8m:08
+p/4417/fd/0r /home/jw/bigfile 115MB/s (16%, 3.2GB)  8m:01
+\end{verbatim}
+
+
+
 \end{document}
