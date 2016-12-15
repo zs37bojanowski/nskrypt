@@ -1170,5 +1170,11 @@ Polecenie \textbf{hwinfo --short} pozwala uzyskać ogólne informacje.
 \section{backup}
 Backup jest niezbędny. Jednym ze sposobów pełnego backupu jest przykład podany w helpie do \textbf{crontab} z zastosowaniem \textbf{tar}. Backup różnicowy może być wykonany poleceniem \textbf{# rsync -avzh /home/ /var/backups/}. Więcej o strategiach backupu tutaj: \footnote{\url{http://searchdatabackup.techtarget.com/feature/Full-incremental-or-differential-How-to-choose-the-correct-backup-type}} i tutaj: \footnote{\url{http://www.mikerubel.org/computers/rsync_snapshots/}}.
 Przykład praktyczny kopiowania zdjęć na zdalny serwer:\textbf{rsync -avz --progress -e ssh */ student@192.168.0.22:/home/BIG/foto/}
-
+\section{Narzędzia inne}
+\subsection{Download: zsync}
+\textbf{zsync} to downloader efektywnie obsługujący zerwane transfery dużych plików, który kopiuje tylko zmienione fragmenty gdy mamy już starszą wersję. \newline
+Przykład instalacji: \textit{sudo apt-get install zsync}; przykład polecenia: \textit{zsync http://www.linuxcnc.org/linuxcnc-2.7-wheezy.iso.zsync}.
+\subsection{Kopiowanie z informacją o postępie}
+Polecenie \textbf{cp} normalnie nie informuje o postępie i szybkości kopiowania. Można posłużyć się \textbf{pv}:\newline
+\textit{pv my_big_file > backup/my_big_file}
 \end{document}
