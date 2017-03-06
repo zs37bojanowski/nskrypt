@@ -188,6 +188,17 @@ Fdisk proponuje optymalne wartości, wystarczy zatwierdzać enterem. Jeśli nowa
 \textbf{# mount /dev/sdb1 /do_zmiany}
 \item{Sprawdź zmiany}
 \textbf{# df -h}
+\item{Reinstalacja / aktualizacja GRUB}
+Moze sie zdarzyc, ze nasze ekperymenty spowoduja "znikniecie" systemu na nowej / starej partycji. Ratujemy sie:
+\begin{verbatim}
+mount -t ext4 /dev/sda2 /mnt/root
+mount -t proc none /mnt/root/proc
+mount -o bind /dev /mnt/root/dev 
+chroot /mnt/root/ /bin/bash
+dpkg-reconfigure grub-pc
+\end{verbatim}
+\item{Po restarcie nalezy zaktualizowac GRUB-a:}
+\textbf{sudo update-grub}
 \end{enumerate}
 \footnote{Inne przydatne narzędzia do partycjonowania \url{http://www.binarytides.com/linux-command-check-disk-partitions/}}
 \section{Rozwiązywanie zadań}
