@@ -171,7 +171,7 @@ Gotowe! Nowa partycja powinna zaiwerać dane poprzedniej mniejszej i dużo wolne
 \textbf{df -h}
 \item{Odmontuj partycję, którą planujesz zmienić}
 \textbf{# umount /do_zmiany}
-\item{Sprawdź ją partycję}
+\item{Sprawdź partycję}
 \textbf{# e2fsck -f /dev/sdb1}
 \item{Zmniejsz system plików na partycji}
 \textbf{# resize2fs /dev/sdb1}
@@ -182,6 +182,8 @@ Teraz usunąłeś partycję, którą planujesz zmienić.
 Uwaga! Po kroku \textit{primary} podajesz stosowny rozmiar.
 \textbf{# fdisk /dev/sdb; n; 1; p; w}
 Fdisk proponuje optymalne wartości, wystarczy zatwierdzać enterem. Jeśli nowa partycja ma być mniejsza niż suma obszaru obejmującego partycję, którą planowałeś zmienić i wolne miejsce za nią po kroku \textit{primary} podajesz stosowny rozmiar.
+\item{Odswiez widok partycji}
+\textbf{# partprobe /dev/sdX} powinno zadzialac. Mozna doinstalowac program \textit{kpartx}.
 \item{Zamontuj ponownie partycję}
 \textbf{# mount /dev/sdb1 /do_zmiany}
 \item{Sprawdź zmiany}
