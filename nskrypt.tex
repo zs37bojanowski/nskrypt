@@ -188,6 +188,8 @@ Fdisk proponuje optymalne wartości, wystarczy zatwierdzać enterem. Jeśli nowa
 \textbf{# mount /dev/sdb1 /do_zmiany}
 \item{Sprawdź zmiany}
 \textbf{# df -h}
+\item{Zmiana rozmiaru partycji FAT}
+Często korzystamy z pendrive'ów z partycjami (V)FAT. Gdy zajdzie potrzeba zmiany rozmiaru takiej partycji wygodnie jest użyć narzędzia \textit{fatresize}. Testowanie: \textbf{fatresize -i /dev/sdc1}; zmiana: \textbf{sudo fatresize -s 2G /dev/sdc1}. Program sam aktualizuje tablicę partycji.
 \item{Reinstalacja / aktualizacja GRUB}
 Moze sie zdarzyc, ze nasze ekperymenty spowoduja "znikniecie" systemu na nowej / starej partycji. Ratujemy sie:
 \begin{verbatim}
