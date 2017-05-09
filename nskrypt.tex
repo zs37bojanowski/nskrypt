@@ -25,6 +25,7 @@
 \pagestyle{headings}%{empty}
 \usepackage[breaklinks]{hyperref}
 \usepackage{graphicx}
+\usepackage{moreverb}
 \AtBeginDocument{\let\textlabel\label}
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 \begin{document}
@@ -222,10 +223,16 @@ navegante@velero:~$ cat zad xyz
 \end{enumerate}
 Po zapisaniu \textbf{zad. xyz} umieszczamy go w katalogu nazwanym wg. daty dziennej -- tutaj "data" i po zakończeniu ćwiczeń tarujemy: \textbf{tar -cvf data.tar data} i zapisujemy na serwer: \textbf{scp data.tar login@ipserwera:}
 \section{Polecenia podstawowe}
-\subsection{Znaki globalne (uogólniające)}
+\subsection{Znaki globalne (uogólniające; regular expressions)}
 Patrz punkt \textbf{2.2.4} ze skryptu.
 \footnote{\url{http://mediologia.pl/bash/5-2-znaki-uogolniajace}}
+\footnote{\url{http://www.linuxnix.com/regular-expressions-linux-i/}}
 Mechanizm rozwijania nawiasów jest symbolizowany przez \textbf{...}.
+\subsubsection{podstawowe}
+\begin{listing}[1]{przykład}
+w katalogu jest sześć katalogów: babac, bac, baca, fata , fatac i fatal. Znajdź te zaczynające się od \textit{b} lub \textit{f} i kończące się na \textit{c}.\newline
+Rozwiązanie: \begin{verbatim}ls | grep '[bf]*c$'\end{verbatim}
+\end{listing}
 \subsection{Konta użytkowników}
 Do zakładania kont dla nowych uzytkowników służą trzy polecenia: \textbf{adduser} dla niedoświadczonych adminów chcących założyć jedno nowe konto; \textbf{useradd} dla doświadczonych i także dla tych ostatnich, metoda wsadowa, \textbf{newusers}.
 \subsubsection{useradd}
