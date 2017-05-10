@@ -229,12 +229,13 @@ Patrz punkt \textbf{2.2.4} ze skryptu.
 \footnote{\url{http://www.linuxnix.com/regular-expressions-linux-i/}}
 Mechanizm rozwijania nawiasów jest symbolizowany przez \textbf{...}.
 \subsubsection{podstawowe}
-\begin{listing}[1]{przykład}
+\begin{alltt}
+przykład 1:
 w katalogu jest sześć katalogów: babac, bac, baca, fata , fatac i fatal.
 Znajdź te zaczynające się od \textit{b} lub \textit{f} i kończące się
 na \textit{c}.\newline
 Rozwiązanie: ls | grep '[bf]*c$'
-\end{listing}
+\end{alltt}
 \subsection{Konta użytkowników}
 Do zakładania kont dla nowych uzytkowników służą trzy polecenia: \textbf{adduser} dla niedoświadczonych adminów chcących założyć jedno nowe konto; \textbf{useradd} dla doświadczonych i także dla tych ostatnich, metoda wsadowa, \textbf{newusers}.
 \subsubsection{useradd}
