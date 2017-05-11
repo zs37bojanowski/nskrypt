@@ -229,7 +229,7 @@ Patrz punkt \textbf{2.2.4} ze skryptu.
 \footnote{\url{http://mediologia.pl/bash/5-2-znaki-uogolniajace}}
 \footnote{\url{http://www.linuxnix.com/regular-expressions-linux-i/}}
 Mechanizm rozwijania nawiasów jest symbolizowany przez \textbf{...}.
-\subsubsection{podstawowe}
+\subsubsection{podstawowe RegEx (znaki globalne)}
 Poniższy zestaw podstawowych globali (regular expressions) nie wymaga żadnych dodatkowych opcji i nadaje się
 do bezpośredniego stosowania np. z \textbf{ls}:
 \begin{enumerate}
@@ -242,13 +242,28 @@ do bezpośredniego stosowania np. z \textbf{ls}:
 \item {[\^znak] --negacja wystąpienia znaku z tego zakresu;}
 \item {słowo -- szukanie danego słowa.}
 \end{enumerate}
-\end{enumerate} 
-
+\end{enumerate}
+\paragraph{Nieco trudniejsze zadania na znaki globalne pochodzące z \footnote{\url{http://moodle.zs37.waw.pl/mod/resource/view.php?id=1837}}}
+\begin{enumerate}
+\item{\begin{verbatim}
+W pewnym folderze znajdują się między innymi pliki: czter4, pli7k, plik, plik1k. Napisz takie polecenie, które wylistuje dokładnie te pliki.
+Odp: ls {p,c}*{4,k}
+\end{verbatim}}
+\item{\begin{verbatim}
+Ala, Klara i Laura są sekretarkami i mają konta na jednym serwerze. Jesteś adminem. Napisz jedno polecenie, które wyśle do ich ~ plik "telefony&adresy"
+Odp: cp ./telefony&adresy /home/*{L,l}a*
+\end{verbatim}}
+\item{\begin{verbatim}
+Księgowy chce skopiować do swojego ~ bilanse z lat 2011,2013,2014 lecz nie z lat pozostałych z zakresu 2000 do 2015. Bilanse przechowuje w katalogu lata 2000_20. Pomóż mu napisać polecenie.
+Odp: cp ./2010_20/201{1,3,4} ~
+\end{verbatim}}
+\end{enumerate}
+\subsubsection{RegEx z \\^ w przykładach}
 \paragraph{przykład 1:}
 \begin{verbatim}
 w katalogu jest sześć katalogów: babac, bac, baca, fata , fatac i fatal.
 Znajdź te zaczynające się od b lub f i kończące się na c.
-Rozwiązanie: ls | grep '[bf]*c$'
+Rozwiązanie: ls | grep '[bf].*c$'
 \end{verbatim}
 \subsection{Konta użytkowników}
 Do zakładania kont dla nowych uzytkowników służą trzy polecenia: \textbf{adduser} dla niedoświadczonych adminów chcących założyć jedno nowe konto; \textbf{useradd} dla doświadczonych i także dla tych ostatnich, metoda wsadowa, \textbf{newusers}.
