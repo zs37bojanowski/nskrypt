@@ -233,7 +233,7 @@ Mechanizm rozwijania nawiasów jest symbolizowany przez \textbf{...}.
 Poniższy zestaw podstawowych globali (regular expressions) nie wymaga żadnych dodatkowych opcji i nadaje się
 do bezpośredniego stosowania np. z \textbf{ls}:
 \begin{enumerate}
-\begin{enumerate}
+%\begin{enumerate}
 \item {\^ -- daszek (Caret or Power symbol) -- stawia się przed znakiem, który ma znajdować się na na początku linii (nazwy) pliku, katalogu itp.;}
 \item {\$ -- stawia się po znaku, który ma znajdować się na na końcu linii (nazwy) pliku, katalogu itp;}
 \item {* -- zero lub więcej wystąpień poprzedniego znaku;}
@@ -262,13 +262,25 @@ Pomóż mu napisać polecenie.
 Odp: cp ./2010_20/201{1,3,4} ~
 \end{verbatim}}
 \end{enumerate}
+
 \subsubsection{RegEx z ^ w przykładach}
-\paragraph{przykład 1:}
-\begin{verbatim}
+
+\subsubsection{RegEx z \textit{grep} w przykładach}
+
+\paragraph{Przykłady z grep}
+\begin{enumerate}
+\item{\begin{verbatim}
 w katalogu jest sześć katalogów: babac, bac, baca, fata , fatac i fatal.
 Znajdź te zaczynające się od b lub f i kończące się na c.
 Rozwiązanie: ls | grep '[bf].*c$'
-\end{verbatim}
+\end{verbatim}}
+
+
+\item{\begin{verbatim}
+Znajdź katalogi, które zaczynają się od b lub f i kończą na c.
+rozwiązanie: ls | grep '[bf]*c$'
+\end{verbatim}}
+\end{enumerate}
 \subsection{Konta użytkowników}
 Do zakładania kont dla nowych uzytkowników służą trzy polecenia: \textbf{adduser} dla niedoświadczonych adminów chcących założyć jedno nowe konto; \textbf{useradd} dla doświadczonych i także dla tych ostatnich, metoda wsadowa, \textbf{newusers}.
 \subsubsection{useradd}
