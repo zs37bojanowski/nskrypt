@@ -234,18 +234,18 @@ Poniższy zestaw podstawowych globali (regular expressions) nie wymaga żadnych 
 do bezpośredniego stosowania np. z \textbf{ls}:
 \begin{enumerate}
 \begin{enumerate}
-\item {^ -- daszek (Caret\/Power symbol) -- stawia się przed znakiem, który ma znajdować się na na początku linii (nazwy,
-) pliku, katalogu itp.;}
+\item {\^ -- daszek (Caret or Power symbol) -- stawia się przed znakiem, który ma znajdować się na na początku linii (nazwy) pliku, katalogu itp.;}
 \item {\$ -- stawia się po znaku, który ma znajdować się na na końcu linii (nazwy) pliku, katalogu itp;}
 \item {* -- zero lub więcej wystąpień poprzedniego znaku;}
 \item {. -- wystąpienie dowolnego znaku;}
 \item {[] -- zakres (dziedzina) znaków;}
-\item {[^znak] --negacja wystąpienia znaku z tego zakresu;}
+\item {[\^znak] --negacja wystąpienia znaku z tego zakresu;}
 \item {słowo -- szukanie danego słowa.}
 \end{enumerate}
 \end{enumerate} 
+
+\paragraph{przykład 1:}
 \begin{verbatim}
-przykład 1:
 w katalogu jest sześć katalogów: babac, bac, baca, fata , fatac i fatal.
 Znajdź te zaczynające się od b lub f i kończące się na c.
 Rozwiązanie: ls | grep '[bf]*c$'
