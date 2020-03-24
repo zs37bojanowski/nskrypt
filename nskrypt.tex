@@ -1245,6 +1245,8 @@ Polecenie \textbf{hwinfo --short} pozwala uzyskać ogólne informacje.
 \subsection{inxi \footnote{\url{http://www.binarytides.com/inxi-system-information-linux/}}}
 \subsection{troubleshooting \footnote{\url{http://www.dedoimedo.com/computers/linux-hardware-troubleshooting.html}}}
 \subsubsection{dmesg}
+\subsection{Podsumowanie narzędzi do badania sprzętu}
+W artykule ,,16 commands to check hardware information on Linux'' \footnote{\url{https://www.binarytides.com/linux-commands-hardware-info/}}  mamy zebranych kilkanaście narzędzi wraz z opisem. Wydaje się, że powinno to wyczerpać nasze zapotrzebowanie na testy sprzętowe.
 \section{backup}
 Backup jest niezbędny. Jednym ze sposobów pełnego backupu jest przykład podany w helpie do \textbf{crontab} z zastosowaniem \textbf{tar}. Backup różnicowy może być wykonany poleceniem \textbf{# rsync -avzh /home/ /var/backups/}. Więcej o strategiach backupu tutaj: \footnote{\url{http://searchdatabackup.techtarget.com/feature/Full-incremental-or-differential-How-to-choose-the-correct-backup-type}} i tutaj: \footnote{\url{http://www.mikerubel.org/computers/rsync_snapshots/}}.
 Przykład praktyczny kopiowania zdjęć na zdalny serwer:\textbf{rsync -avz --progress -e ssh */ student@192.168.0.22:/home/BIG/foto/}
