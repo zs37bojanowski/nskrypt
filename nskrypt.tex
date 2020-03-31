@@ -924,6 +924,32 @@ sshfs login@10.0.2.186: ~/mountpoint
 \end{verbatim}
 \subsection{Firewall}
 Ponieważ konfiguracja \textit{iptables}, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu \textit{ufw}. \texttt{Uncomplicated Firewall} w pełni zasługuje na swą nazwę. Oto na niego przepis:\footnote{\url{http://www.tecmint.com/how-to-install-and-configure-ufw-firewall/}}
+
+based on https://help.ubuntu.com/community/Gufw
+and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
+oraz po polsku na: https://webinsider.pl/linux-firewall-ufw/
+
+Many hacking attempts are successful because users choose weak passwords and leave common ports open and listening.
+Configuration
+
+Configuring ufw is almost as simple as installing it. It’s a very intuitive tool.
+
+Ufw comes disabled by default, so the first thing you want to do is enable it and answer y to the prompt:
+
+$ ufw enable
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+
+Alright, now it’s enabled and will be executed upon server startup as well. This way, even if you reboot your Webby, ufw will continue to run.
+Denying connections by default
+
+When installed, ufw acts very unobtrusively: it won’t close access to any ports. However, in order to really secure our system, we should take the inverse approach. This approach is deny any connections, except the ones we explicitly find we need.
+
+Before changing the default ufw operation mode, let’s make sure we allow connections to the ssh port we’re connected to:
+
+$ ufw allow 22
+Rule added
+
 \subsection{Skanowanie portów}
 \subsubsection{Netcat}
 Po wstępnej konfiguracji firewalla wypada sprawdzić jak przedstawia się nasz PC dla sieci. Najpierw użyjemy narzędzia \textt{Netcat}\footnote{patrz: man netcat -- netcat is a simple unix utility which reads and writes data across network connections, using TCP or UDP protocol. It is designed to be a reliable "back-end" tool that can be used directly or easily driven by other programs and scripts. At the same time, it is a feature- rich network debugging and exploration tool, since it can create almost any kind of connec‐ tion you would need and has several interesting built-in capabilities. Netcat, or "nc" as the actual program is named, should have been supplied long ago as another one of those cryptic but standard Unix tools.}
