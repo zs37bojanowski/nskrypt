@@ -688,267 +688,331 @@ echo "Zapisałem jako" $filename"f-matted"
 \begin{verbatim}
 cat spreadsheet\_test\_answer \textbar sort -R \textbar pr -T4 -W$COLUMNS
 \end{verbatim}
-Polecenie powyższe plik spread*swer rozsortowuje losowo ( -R) i wyświetla na ekranie w 4-ch kolumnach używając programu \textit{pr}\footnote{Paginate or columnate FILE(s) for printing.} \textbf{pr} potrafi np. wyświetlać text ''gazetowo'' czyli w równoległych kolumnach (opcja \textit{merge -m}).
-\subsection{sortowania}
-\footnote{\url{http://www.computerhope.com/unix/usort.htm}}
+	Polecenie powyższe plik spread*swer rozsortowuje losowo ( -R) i wyświetla na ekranie w 4-ch kolumnach używając programu \textit{pr}\footnote{Paginate or columnate FILE(s) for printing.} \textbf{pr} potrafi np. wyświetlać text ''gazetowo'' czyli w równoległych kolumnach (opcja \textit{merge -m}).
+	\subsection{sortowania}
+	\footnote{\url{http://www.computerhope.com/unix/usort.htm}}
 
-Normalnie \textbf{sort} bierze pod uwagę całą linię porównując każdy znak od lewej do prawej. Jeśli mamy tekst w kolumnach, możemy określić, które pola mają być porównywane dzięki opcji \textbf{ -k}.
-Np. weźmy plik:
-\begin{verbatim}
-$ cat -n lista2Tb1 > lista2Tb1num 
- 1	bdyga
- 2	jblacha
- 3	jblaszczyk
- 4	kdomanski
- 5	mberggrun
- 6	mczernicki
- 7	pglazewski
- 8	sbak
+	Normalnie \textbf{sort} bierze pod uwagę całą linię porównując każdy znak od lewej do prawej. Jeśli mamy tekst w kolumnach, możemy określić, które pola mają być porównywane dzięki opcji \textbf{ -k}.
+	Np. weźmy plik:
+	\begin{verbatim}
+	$ cat -n lista2Tb1 > lista2Tb1num 
+	 1	bdyga
+	 2	jblacha
+	 3	jblaszczyk
+	 4	kdomanski
+	 5	mberggrun
+	 6	mczernicki
+	 7	pglazewski
+	 8	sbak
 
-\end{verbatim}
-Aby listę nazwisk posortować wg. nazwisk odzielamy nazwiska od imion:\newline
-\begin{verbatim}
-cut -c2- lista2Tb1 | cat -n
- 1	dyga
- 2	blacha
- 3	blaszczyk
- 4	domanski
- 5	berggrun
- 6	czernicki
- 7	glazewski
- 8	bak
-\end{verbatim}
-Jeśli chcemy posortować wg 2-giej kolumny, korzystamy z polecenia:
-\textbf{sort -k2 lista2Tbnum}
-\subsection{\textbf{sort} i \textbf{join\footer{Related commands:\newline
-comm — Compare two sorted files line by line.\newline
-join — Join the lines of two files which share a common field of data.\newline
-uniq — Identify, and optionally filter out, repeated lines in a file.}} użyte razem}
-Bardzo użyteczne połączenie. Zwykle \textbf{join} łączy linie dwóch plików, których pola sobie odpowiadają tj. zawierają część wspólną (tutaj numerację) domyślnie oddzielone spacją (whitespace). Mamy dwa pliki \textit{lewy} i \textit{prawy}. Pierwszy zawiera:
-\begin{verbatim}
-1 b
-2 j
-3 j
-4 k
-5 m
-6 m
-7 p
-8 s
-\end{verbatim}
-...i drugi zawiera:
-\begin{verbatim}
-8 bak
-5 berggrun
-2 blacha
-3 blaszczyk
-6 czernicki
-4 domanski
-1 dyga
-7 glazewski
-\end{verbatim}
-Możliwe jest posortowanie i połączenie tych dwóch plików jednocześnie jedną komendą:
-\begin{verbatim}
-join <(sort file1.txt) <(sort file2.txt) #sortowanie wg. 1 kolumny w obu plikach
-\end{verbatim}
-Sortowanie wykonane jest dla obu nawiasów a ich wyjście przekierowane do \textbf{join}, które pobiera potok jako wejście dla pierwszego i drugiego argumentu; wynik:
-\begin{verbatim}
-1 b dyga
-2 j blacha
-3 j blaszczyk
-4 k domanski
-5 m berggrun
-6 m czernicki
-7 p glazewski
-8 s bak
-\end{verbatim}
-\subsection{algorytm lista nazwisk}
-\begin{enumerate}
-\item{odcięcie pierwszej kolumny i zapis do \textit{/tmp/1}: \texttt{cut -c1 lista2Tb1 > /tmp/1}}
-\item{odcięcie reszty i zapis do \textit{/tmp/2}: \texttt{cut -c2- lista2Tb1 \textbar cat -n > /tmp/2}}
-\item{ponowne połączenie ze spacją i zapis do \textit{/tmp/3}: \texttt{join /tmp/1 /tmp/2}}
-\item{sortowanie wg. 2-giej kolumny i numerowanie: \texttt{cat -n /tmp/3 \textbar sort -k2}}
-Podsumujmy\newline
-Aby z listy w postaci:
-\begin{verbatim}
-bdyga
-jblacha
-jblaszczyk
-kdomanski
-mberggrun
-mczernicki
-pglazewski
-sbak
-\end{verbatim}
-otrzymać postać:
-\begin{verbatim}
-s bak
-m berggrun
-j blacha
-j blaszczyk
-m czernicki
-k domanski
-b dyga
-p glazewski
-\end{verbatim}
-wykonujemy skrypt:
-\begin{verbatim}
-#/bin/bash
-#algorytm lista klasy
-cut -c1 lista2Tb1 > /tmp/1
-cut -c2- lista2Tb1 > /tmp/2
-paste -d ' ' /tmp/1 /tmp/2 > /tmp/3 #paste delimiter=space
-cat /tmp/3 | sort -k2 #sort wg. 2-giej kolumny
-\end{verbatim}
-\section{find}
-\subsection{Czym się różnią \textbf{mtime}, \textbf{ctime} i \textbf{atime}}
-\textbf{mtime} to czas modyfikacji pliku zmieniany zawsze po edycji pliku i/lub jego zapisie.\newline
-\textbf{ctime} to czas zmiany bazy \textit{inode} lub zmiany samego pliku. Jest zmieniany każdorazowo po zmianie atrybutów jak: właścieciel, uprawnienia, przeniesienia pliku do innego (filesystem) a także po zmianie zawartości.\newline
-\textbf{atime} to czas ''dotknięcia'' (access) pliku zmieniany gdy plik jest otwierany, listowany, sortowany itp. Np. gdy wykonywane są na nim operacje przez narzędzia takie jak: grep, sort, cat, head, tail itp.
-*biblio
-\url{https://pomoc.home.pl/baza-wiedzy/polecenia-bash-ktore-sluza-do-zarzadzania-plikami-na-serwerze/}
-\url{http://linuxcommand.org/lc3\_lts0090.php}
-\url{http://www.howtogeek.com/howto/29980/whats-the-difference-between-single-and-double-quotes-in-the-bash-shell/}
-\section{Prawa\footnote{Na podstawie:\url{http://en.wikipedia.org/wiki/File\_system\_permissions}\footnote{Patrz też:\url{http://www.ibm.com/developerworks/library/l-lpic1-v3-104-5/}}}}
-\subsection{ACL lista kontroli dostepu}
-Lista praw dotyczacych obiektu (plik, folder) określająca któremu użytkownikowi lub procesowi zezwala się i na jakie operacje. ACL także może zarządzać grupami i ich zależnością hierarchiczną. Linux (UNIX-like) spełnia wymagania POSIX i posiada prosty system zarządzania prawami do plików (Traditional UNIX permissions). Większość systemów UNIX-like wspiera w pewnym zakresie metodę ACL (NFSv4).
-\subsection{Traditional UNIX permissions}
-Prawa tu oparte są na trzech klasach użytkowników: \textit{user} właściciel, \textit{group} grupa i \textit{others} inni (pozostali, reszta świata). Gdy tworzony jest nowy plik, prawa do niego ustawiane są przez \textit{umask} maskę. 
-\subsubsection{Klasy użytkowników}
-Pliki i katalogi należą do \textit{user} (właściciel). Pliki i katalogi są przypisane do \textit{group} grupy, określonej przez klasę \textit{group}. Właściciel może należeć do \textit{group}. Użytkownicy nie będący właścicielami, ani członkami \textit{group} tworzą klasę \textit{others} (inni).\newline
-Prawa efektywne wynikają z klasy \textit{user}. Przykładowo, właściciel pliku ma prawa nadane klasie \textit{user} bez względu na prawa nadane \textit{group} lub innej.
-\subsubsection{Prawa opisane}
-UNIX-like stosują trzy szczególne prawa stosowane do każdej z klas:
-\begin{enumerate}
-\item{\textbf{read} (odczyt) zezwala na odczyt pliku. Gdy dotyczy katalogu, zezwala jedynie \textbf{czytać} nazwy plików w katalogu (listować je) lecz nie na dostęp do jakichkolwiek innych informacji o pliku jak: zawartość (treść), typ, wielkość, prawa, właściciel.}
-\item{\textbf{write} (zapis) zezwala na modyfikację pliku. Ustawione dla katalogu zezwala na zmianę plików w katalogu: ich tworzenie, usuwanie, zmianę nazwy.}
-\item{\textbf{execute} (wykonanie) zezwala na uruchomienie (skryptu); musi być ustawione dla skryptów. Ustawione dla katalogu zezwala na dostęp do zawartości pliku i meta info gdy znamy nazwę pliku, lecz nie na listowanie katalogu, chyba że także zezwala sie na odczyt \textbf{read}.}
-\end{enumerate}
-Jeśli prawa nie są ustawione, pozostają zabronione. W odróżnieniu od systemów bazujących na ACL prawa w UNIX-like nie są dziedziczone. Pliki utworzone wewnątrz katalogu nie muszą mieć tych samych praw jak katalog.
-\subsubsection{Zmiana praw przez setuid, setgui, sticky bit}
-Trzy dodatkowe tryby stosuje się do pliku lub katalogu nie do klasy.
-\begin{enumerate}
-\item{\textbf{set user ID} lub SUID. Uruchomienie pliku z ustawionym \textit{setuid} znaczy, że wykonywany proces przyjmie realny ID swojego właściciela. Tzn. skrypt będzie wykonywany jak gdyby uruchomił go właściciel. Umożliwia to wykonanie skryptu z prawami np. root przez innego użytkownika. Umożliwia użytkownikom stać się na chwilę root'em lub kimś innym.}
-\item{\textbf{set group ID} lub SGID. Gdy uruchamiany jest plik z \textit{setgid} proces przyjmie ID grupy nadany klasie \textbf{group}. Jeśli \textit{setgid} jest zastosowany do katalogu, nowe pliki i katalogi w nim utworzone dziedziczą grupę z tego katalogu.
-\item{\textbf{sticky bit} nazywany też \textit{Text mode}}. Ustawiany dla katalogu zabezpiecza przed zmianą nazwy, przeniesieniem lub usunięciem plików zawartych w tym katalogu, które należą do użytkowników innych niż wydający polecenie, nawet wtedy jeśli posiada on prawo pisania w tym katalogu. Jednak właściciel katalogu i superuser są z tego zwolnieni i będą mogli to uczynić.
-\end{enumerate}
-\subsection{Prywatna grupa użytkownika}
-Nasz Debian (i nie tylko on) wykracza poza tradycyjny model POSIX i dodaje dla każdego użytkownika grupę, do której należy tylko on. Oznacza to, że każdy jest jedynym członkiem swojej prywatnej grupy. Pozwla to na sosowanie maski \textit{umask} o wartości 002, co nie pozwala na zapis inym użytkownikom nowych plików do zwykłych katalogów, ponieważ takie pliki są przypisane do prywatnych grup tworzących je uzytkowników. Jednakowoż gdy potrzebne jest uwspólnieie plików administrator może: \begin{enumerate} \item{stworzyć grupę zawierającą potrzebnych uzytkowników} \item{stworzyć katalog zapisywalny przez tę grupę} i najważniejsze: \item{ustawić \textit{setgid} dla tego katalogu}. To pozwoli plikom tworzonym we wspólnym katalogu być przypisanym do tej samej grupy co katalog i maska 002 zapweni innym członkom grupy pisanie do tych plików. Dodatkowo warto dodać do nowego katalogu {\textbf{sticky bit}.
-\subsection{chmod\footnote{http://www.arturpyszczuk.pl/commands-chmod.html}}
-Opcja -c która jest podobna do opcji -v (verbose) znanej z większości poleceń systemowych (informowanie o dokonanych czynnościach), różni się tym, że informacje o dokonanych zmianach zostaną wyświetlone, jeśli prawa dostępu zostały zmienione (jeśli uprzednio były takie same, informacje nie zostaną wydrukowane).
-\subsection{Przykład z ACL}
-Rozważmy problem\footnote{na podstawie zadania z:\url{http://smurf.mimuw.edu.pl/book/export/html/84}}:\newline
-Jako root załóż katalog \textit{/home/public} i skonfiguruj dostęp następująco:
-\begin{enumerate}
-\item{admin ma wszelkie uprawnienia do katalogu \textit{/home/public} i jego zawartości;}
-\item{Grupa G1 ma prawo do odczytu plików, które powstaną w katalogu \textit{/home/public};}
-\item{Grupa G2 ma prawo do odczytu, wykonywania i modyfikacji plików, które powstaną w katalogu \textit{/home/public}, nie ma natomiast prawa do tworzenia nowych plików w tym katalogu;}
-\item{Pozostali nie mają żadnych praw do katalogu \textit{/home/public}.}
-\end{enumerate}
-Rozwiązanie (jako sudo):\newline
-\begin{verbatim}
-mkdir /home/public
-chown admin:G2 /home/public
-chmod 770 /home/public
-setfacl -m g:G1:r /home/public
-\end{verbatim}
-Aby ustawić, inne niż dla G2, prawa grupie G1 użyto polecenia \textbf{setfacl} - set file access control lists. Aby odczytać ustawione prawa użyto \textbf{getfacl}:
-\begin{verbatim
-getfacl /home/public
-getfacl: Removing leading '/' from absolute path names
-\# file: home/public
-\# owner: root
-\# group: root
-user::rwx
-group::rwx
-other::---
-default:user::rwx
-default:group::rwx
-default:group:G1:r-x
-default:group:G2:rwx
-default:mask::rwx
-default:other::---
-\end{verbatim}
+	\end{verbatim}
+	Aby listę nazwisk posortować wg. nazwisk odzielamy nazwiska od imion:\newline
+	\begin{verbatim}
+	cut -c2- lista2Tb1 | cat -n
+	 1	dyga
+	 2	blacha
+	 3	blaszczyk
+	 4	domanski
+	 5	berggrun
+	 6	czernicki
+	 7	glazewski
+	 8	bak
+	\end{verbatim}
+	Jeśli chcemy posortować wg 2-giej kolumny, korzystamy z polecenia:
+	\textbf{sort -k2 lista2Tbnum}
+	\subsection{\textbf{sort} i \textbf{join\footer{Related commands:\newline
+	comm — Compare two sorted files line by line.\newline
+	join — Join the lines of two files which share a common field of data.\newline
+	uniq — Identify, and optionally filter out, repeated lines in a file.}} użyte razem}
+	Bardzo użyteczne połączenie. Zwykle \textbf{join} łączy linie dwóch plików, których pola sobie odpowiadają tj. zawierają część wspólną (tutaj numerację) domyślnie oddzielone spacją (whitespace). Mamy dwa pliki \textit{lewy} i \textit{prawy}. Pierwszy zawiera:
+	\begin{verbatim}
+	1 b
+	2 j
+	3 j
+	4 k
+	5 m
+	6 m
+	7 p
+	8 s
+	\end{verbatim}
+	...i drugi zawiera:
+	\begin{verbatim}
+	8 bak
+	5 berggrun
+	2 blacha
+	3 blaszczyk
+	6 czernicki
+	4 domanski
+	1 dyga
+	7 glazewski
+	\end{verbatim}
+	Możliwe jest posortowanie i połączenie tych dwóch plików jednocześnie jedną komendą:
+	\begin{verbatim}
+	join <(sort file1.txt) <(sort file2.txt) #sortowanie wg. 1 kolumny w obu plikach
+	\end{verbatim}
+	Sortowanie wykonane jest dla obu nawiasów a ich wyjście przekierowane do \textbf{join}, które pobiera potok jako wejście dla pierwszego i drugiego argumentu; wynik:
+	\begin{verbatim}
+	1 b dyga
+	2 j blacha
+	3 j blaszczyk
+	4 k domanski
+	5 m berggrun
+	6 m czernicki
+	7 p glazewski
+	8 s bak
+	\end{verbatim}
+	\subsection{algorytm lista nazwisk}
+	\begin{enumerate}
+	\item{odcięcie pierwszej kolumny i zapis do \textit{/tmp/1}: \texttt{cut -c1 lista2Tb1 > /tmp/1}}
+	\item{odcięcie reszty i zapis do \textit{/tmp/2}: \texttt{cut -c2- lista2Tb1 \textbar cat -n > /tmp/2}}
+	\item{ponowne połączenie ze spacją i zapis do \textit{/tmp/3}: \texttt{join /tmp/1 /tmp/2}}
+	\item{sortowanie wg. 2-giej kolumny i numerowanie: \texttt{cat -n /tmp/3 \textbar sort -k2}}
+	Podsumujmy\newline
+	Aby z listy w postaci:
+	\begin{verbatim}
+	bdyga
+	jblacha
+	jblaszczyk
+	kdomanski
+	mberggrun
+	mczernicki
+	pglazewski
+	sbak
+	\end{verbatim}
+	otrzymać postać:
+	\begin{verbatim}
+	s bak
+	m berggrun
+	j blacha
+	j blaszczyk
+	m czernicki
+	k domanski
+	b dyga
+	p glazewski
+	\end{verbatim}
+	wykonujemy skrypt:
+	\begin{verbatim}
+	#/bin/bash
+	#algorytm lista klasy
+	cut -c1 lista2Tb1 > /tmp/1
+	cut -c2- lista2Tb1 > /tmp/2
+	paste -d ' ' /tmp/1 /tmp/2 > /tmp/3 #paste delimiter=space
+	cat /tmp/3 | sort -k2 #sort wg. 2-giej kolumny
+	\end{verbatim}
+	\section{find}
+	\subsection{Czym się różnią \textbf{mtime}, \textbf{ctime} i \textbf{atime}}
+	\textbf{mtime} to czas modyfikacji pliku zmieniany zawsze po edycji pliku i/lub jego zapisie.\newline
+	\textbf{ctime} to czas zmiany bazy \textit{inode} lub zmiany samego pliku. Jest zmieniany każdorazowo po zmianie atrybutów jak: właścieciel, uprawnienia, przeniesienia pliku do innego (filesystem) a także po zmianie zawartości.\newline
+	\textbf{atime} to czas ''dotknięcia'' (access) pliku zmieniany gdy plik jest otwierany, listowany, sortowany itp. Np. gdy wykonywane są na nim operacje przez narzędzia takie jak: grep, sort, cat, head, tail itp.
+	*biblio
+	\url{https://pomoc.home.pl/baza-wiedzy/polecenia-bash-ktore-sluza-do-zarzadzania-plikami-na-serwerze/}
+	\url{http://linuxcommand.org/lc3\_lts0090.php}
+	\url{http://www.howtogeek.com/howto/29980/whats-the-difference-between-single-and-double-quotes-in-the-bash-shell/}
+	\section{Prawa\footnote{Na podstawie:\url{http://en.wikipedia.org/wiki/File\_system\_permissions}\footnote{Patrz też:\url{http://www.ibm.com/developerworks/library/l-lpic1-v3-104-5/}}}}
+	\subsection{ACL lista kontroli dostepu}
+	Lista praw dotyczacych obiektu (plik, folder) określająca któremu użytkownikowi lub procesowi zezwala się i na jakie operacje. ACL także może zarządzać grupami i ich zależnością hierarchiczną. Linux (UNIX-like) spełnia wymagania POSIX i posiada prosty system zarządzania prawami do plików (Traditional UNIX permissions). Większość systemów UNIX-like wspiera w pewnym zakresie metodę ACL (NFSv4).
+	\subsection{Traditional UNIX permissions}
+	Prawa tu oparte są na trzech klasach użytkowników: \textit{user} właściciel, \textit{group} grupa i \textit{others} inni (pozostali, reszta świata). Gdy tworzony jest nowy plik, prawa do niego ustawiane są przez \textit{umask} maskę. 
+	\subsubsection{Klasy użytkowników}
+	Pliki i katalogi należą do \textit{user} (właściciel). Pliki i katalogi są przypisane do \textit{group} grupy, określonej przez klasę \textit{group}. Właściciel może należeć do \textit{group}. Użytkownicy nie będący właścicielami, ani członkami \textit{group} tworzą klasę \textit{others} (inni).\newline
+	Prawa efektywne wynikają z klasy \textit{user}. Przykładowo, właściciel pliku ma prawa nadane klasie \textit{user} bez względu na prawa nadane \textit{group} lub innej.
+	\subsubsection{Prawa opisane}
+	UNIX-like stosują trzy szczególne prawa stosowane do każdej z klas:
+	\begin{enumerate}
+	\item{\textbf{read} (odczyt) zezwala na odczyt pliku. Gdy dotyczy katalogu, zezwala jedynie \textbf{czytać} nazwy plików w katalogu (listować je) lecz nie na dostęp do jakichkolwiek innych informacji o pliku jak: zawartość (treść), typ, wielkość, prawa, właściciel.}
+	\item{\textbf{write} (zapis) zezwala na modyfikację pliku. Ustawione dla katalogu zezwala na zmianę plików w katalogu: ich tworzenie, usuwanie, zmianę nazwy.}
+	\item{\textbf{execute} (wykonanie) zezwala na uruchomienie (skryptu); musi być ustawione dla skryptów. Ustawione dla katalogu zezwala na dostęp do zawartości pliku i meta info gdy znamy nazwę pliku, lecz nie na listowanie katalogu, chyba że także zezwala sie na odczyt \textbf{read}.}
+	\end{enumerate}
+	Jeśli prawa nie są ustawione, pozostają zabronione. W odróżnieniu od systemów bazujących na ACL prawa w UNIX-like nie są dziedziczone. Pliki utworzone wewnątrz katalogu nie muszą mieć tych samych praw jak katalog.
+	\subsubsection{Zmiana praw przez setuid, setgui, sticky bit}
+	Trzy dodatkowe tryby stosuje się do pliku lub katalogu nie do klasy.
+	\begin{enumerate}
+	\item{\textbf{set user ID} lub SUID. Uruchomienie pliku z ustawionym \textit{setuid} znaczy, że wykonywany proces przyjmie realny ID swojego właściciela. Tzn. skrypt będzie wykonywany jak gdyby uruchomił go właściciel. Umożliwia to wykonanie skryptu z prawami np. root przez innego użytkownika. Umożliwia użytkownikom stać się na chwilę root'em lub kimś innym.}
+	\item{\textbf{set group ID} lub SGID. Gdy uruchamiany jest plik z \textit{setgid} proces przyjmie ID grupy nadany klasie \textbf{group}. Jeśli \textit{setgid} jest zastosowany do katalogu, nowe pliki i katalogi w nim utworzone dziedziczą grupę z tego katalogu.
+	\item{\textbf{sticky bit} nazywany też \textit{Text mode}}. Ustawiany dla katalogu zabezpiecza przed zmianą nazwy, przeniesieniem lub usunięciem plików zawartych w tym katalogu, które należą do użytkowników innych niż wydający polecenie, nawet wtedy jeśli posiada on prawo pisania w tym katalogu. Jednak właściciel katalogu i superuser są z tego zwolnieni i będą mogli to uczynić.
+	\end{enumerate}
+	\subsection{Prywatna grupa użytkownika}
+	Nasz Debian (i nie tylko on) wykracza poza tradycyjny model POSIX i dodaje dla każdego użytkownika grupę, do której należy tylko on. Oznacza to, że każdy jest jedynym członkiem swojej prywatnej grupy. Pozwla to na sosowanie maski \textit{umask} o wartości 002, co nie pozwala na zapis inym użytkownikom nowych plików do zwykłych katalogów, ponieważ takie pliki są przypisane do prywatnych grup tworzących je uzytkowników. Jednakowoż gdy potrzebne jest uwspólnieie plików administrator może: \begin{enumerate} \item{stworzyć grupę zawierającą potrzebnych uzytkowników} \item{stworzyć katalog zapisywalny przez tę grupę} i najważniejsze: \item{ustawić \textit{setgid} dla tego katalogu}. To pozwoli plikom tworzonym we wspólnym katalogu być przypisanym do tej samej grupy co katalog i maska 002 zapweni innym członkom grupy pisanie do tych plików. Dodatkowo warto dodać do nowego katalogu {\textbf{sticky bit}.
+	\subsection{chmod\footnote{http://www.arturpyszczuk.pl/commands-chmod.html}}
+	Opcja -c która jest podobna do opcji -v (verbose) znanej z większości poleceń systemowych (informowanie o dokonanych czynnościach), różni się tym, że informacje o dokonanych zmianach zostaną wyświetlone, jeśli prawa dostępu zostały zmienione (jeśli uprzednio były takie same, informacje nie zostaną wydrukowane).
+	\subsection{Przykład z ACL}
+	Rozważmy problem\footnote{na podstawie zadania z:\url{http://smurf.mimuw.edu.pl/book/export/html/84}}:\newline
+	Jako root załóż katalog \textit{/home/public} i skonfiguruj dostęp następująco:
+	\begin{enumerate}
+	\item{admin ma wszelkie uprawnienia do katalogu \textit{/home/public} i jego zawartości;}
+	\item{Grupa G1 ma prawo do odczytu plików, które powstaną w katalogu \textit{/home/public};}
+	\item{Grupa G2 ma prawo do odczytu, wykonywania i modyfikacji plików, które powstaną w katalogu \textit{/home/public}, nie ma natomiast prawa do tworzenia nowych plików w tym katalogu;}
+	\item{Pozostali nie mają żadnych praw do katalogu \textit{/home/public}.}
+	\end{enumerate}
+	Rozwiązanie (jako sudo):\newline
+	\begin{verbatim}
+	mkdir /home/public
+	chown admin:G2 /home/public
+	chmod 770 /home/public
+	setfacl -m g:G1:r /home/public
+	\end{verbatim}
+	Aby ustawić, inne niż dla G2, prawa grupie G1 użyto polecenia \textbf{setfacl} - set file access control lists. Aby odczytać ustawione prawa użyto \textbf{getfacl}:
+	\begin{verbatim
+	getfacl /home/public
+	getfacl: Removing leading '/' from absolute path names
+	\# file: home/public
+	\# owner: root
+	\# group: root
+	user::rwx
+	group::rwx
+	other::---
+	default:user::rwx
+	default:group::rwx
+	default:group:G1:r-x
+	default:group:G2:rwx
+	default:mask::rwx
+	default:other::---
+	\end{verbatim}
 
 
-\section{Zabawy z ISO}
-\subsection{Montowanie ISO jako CD/DVD}
-\texttt{mkdir /mnt/iso\_image}
-\texttt{mount -t iso9660 -o loop image.iso /mnt/iso\_image}
+	\section{Zabawy z ISO}
+	\subsection{Montowanie ISO jako CD/DVD}
+	\texttt{mkdir /mnt/iso\_image}
+	\texttt{mount -t iso9660 -o loop image.iso /mnt/iso\_image}
 
-\subsection{Bootowalny USB-live z ISO}
-Dla miłośników suwania myszką rzecz załatwia program \textbf{UNetbootin} wymagający praw \textit{root}. Pozostaje:\begin{enumerate}
-\item{Ściągnąć potrzebny ISO image}
-\item{zweryfikować go wyliczając programem \textbf{md5sum} sumę kontrolną i porównać ją z podaną na stronie pobierania}
-\item{Użyć programu zapisując ISO na usb}
-\end{enumerate}
-Dla miłośników klawiatury (wykonujemy punkty 1 i 2 wymienione powyżej i dalej):
-\begin{enumerate}
-\item{Warto sprawdzić nazwę naszego flash--drive (usb). W tym celu monitorujemy wpis w \textit{/var/log/messages} lub \textit{/var/log/syslog}, który kernel doda po włożeniu flash--drive}: \texttt{sudo tail -f /var/log/messages}. Np. otrzymaliśmy, że nazwa pen--drive to \texttt{/dev/sdb} a pierwsza partycja to \texttt{/dev/sdb1}.
-\item{Odmontować flash--drive: \texttt{sudo umount /dev/sdb1}}
-\item{''Wejść'' na drive: \texttt{sudo fdisk /dev/sdb} (opcja)}
-\item{Wykonać file-system na drive: \texttt{sudo mkfs -t vfat /dev/sdb1}}
-\item{Użyj \textit{dd}: \texttt{dd if=file.iso of=/dev/sdb}. Jeśli image jest bootowalny, flash--drive też będzie.}
-\end{enumerate}
-Istotne jest ustawienie parametru "bs=". I tak wartości:
+	\subsection{Bootowalny USB-live z ISO}
+	Dla miłośników suwania myszką rzecz załatwia program \textbf{UNetbootin} wymagający praw \textit{root}. Pozostaje:\begin{enumerate}
+	\item{Ściągnąć potrzebny ISO image}
+	\item{zweryfikować go wyliczając programem \textbf{md5sum} sumę kontrolną i porównać ją z podaną na stronie pobierania}
+	\item{Użyć programu zapisując ISO na usb}
+	\end{enumerate}
+	Dla miłośników klawiatury (wykonujemy punkty 1 i 2 wymienione powyżej i dalej):
+	\begin{enumerate}
+	\item{Warto sprawdzić nazwę naszego flash--drive (usb). W tym celu monitorujemy wpis w \textit{/var/log/messages} lub \textit{/var/log/syslog}, który kernel doda po włożeniu flash--drive}: \texttt{sudo tail -f /var/log/messages}. Np. otrzymaliśmy, że nazwa pen--drive to \texttt{/dev/sdb} a pierwsza partycja to \texttt{/dev/sdb1}.
+	\item{Odmontować flash--drive: \texttt{sudo umount /dev/sdb1}}
+	\item{''Wejść'' na drive: \texttt{sudo fdisk /dev/sdb} (opcja)}
+	\item{Wykonać file-system na drive: \texttt{sudo mkfs -t vfat /dev/sdb1}}
+	\item{Użyj \textit{dd}: \texttt{dd if=file.iso of=/dev/sdb}. Jeśli image jest bootowalny, flash--drive też będzie.}
+	\end{enumerate}
+	Istotne jest ustawienie parametru "bs=". I tak wartości:
 
-bs=16384 - 1 godz. 5 min.
-bs=8192 - 1 godz. 7 min.
-bs=4096 - 1 godz. 7 min.
-bs=2048 - 6 godz. 53 min.
+	bs=16384 - 1 godz. 5 min.
+	bs=8192 - 1 godz. 7 min.
+	bs=4096 - 1 godz. 7 min.
+	bs=2048 - 6 godz. 53 min.
 
-kopiowanie dwóch identycznych dysków (dysk->dysk) o poj. 250GB.
-\subsection{CD/DVD}
-\begin{enumerate}
-\item{Kasowanie Re-Writable CD-ROM: \texttt{wodim dev=/dev/cdrw blank=fast}}
-\item{Zapis ISO na CD/DVD: \texttt{wodim dev=/dev/cdrw image.iso}; użyteczne opcje: -v, - dao (''disk at once'').}
-\end{enumerate}
-\section{Kasowanie ostatnich aktywności w Gnome\footnote{https://bbs.archlinux.org/viewtopic.php?id=116870}}
-\texttt{rm ~/.local/share/recently-used.xbel*}; np.: \textt{/home/navegante/.local/share/recently-used.xbel} i (jeśli konieczne) restart Gnome: \texttt{sudo /etc/init.d/gdm restart} lub \texttt{sudo killall gnome-panel}.
-\section{ssh ''po kluczach''}
-\url{http://www.nibyblog.pl/ssh-bezhaslowe-logowanie-czyli-autoryzacja-za-pomoca-klucza-dsa-1202.html}
-\section{Wszystko dostępne}
-\url{http://krzychu.info/czyli-wszystko-jest-jednym-dyskiem}
+	kopiowanie dwóch identycznych dysków (dysk->dysk) o poj. 250GB.
+	\subsection{CD/DVD}
+	\begin{enumerate}
+	\item{Kasowanie Re-Writable CD-ROM: \texttt{wodim dev=/dev/cdrw blank=fast}}
+	\item{Zapis ISO na CD/DVD: \texttt{wodim dev=/dev/cdrw image.iso}; użyteczne opcje: -v, - dao (''disk at once'').}
+	\end{enumerate}
+	\section{Kasowanie ostatnich aktywności w Gnome\footnote{https://bbs.archlinux.org/viewtopic.php?id=116870}}
+	\texttt{rm ~/.local/share/recently-used.xbel*}; np.: \textt{/home/navegante/.local/share/recently-used.xbel} i (jeśli konieczne) restart Gnome: \texttt{sudo /etc/init.d/gdm restart} lub \texttt{sudo killall gnome-panel}.
+	\section{ssh ''po kluczach''}
+	\url{http://www.nibyblog.pl/ssh-bezhaslowe-logowanie-czyli-autoryzacja-za-pomoca-klucza-dsa-1202.html}
+	\section{Wszystko dostępne}
+	\url{http://krzychu.info/czyli-wszystko-jest-jednym-dyskiem}
 
-\section{Automatyczna instalacja systemu (\texttt{preseeding})}
-Często w praktyce administratora pewnej liczby komputerów (biuro, pracownia szkolna) zachodzi konieczność reinstalacji na kilku z nich np. wskutek awarii. W praktyce też czas na wykonanie tych operacji jest bardzo ograniczony. Powstała zatem potrzeba zautomatyzowania całego procesu. Jak widzieliśmy proces instalacji sprowadza się do ścisłych odpowiedzi na pytania, które precyzują typ przyszłej maszyny i zakres instalowanego oprogramowania. Można więc stworzyć plik (\texttt{seed}) opisujący te wymagania i podać go instalatorowi do czytania podczas instalacji. Opis metody w dokumentacji Debiana:\footnote{https://www.debian.org/releases/stable/amd64/apbs02.html.en}. Przykładowy plik opisujący:\footnote{https://www.debian.org/releases/stable/amd64/apbs04.html.en}
-\subsection{Instalacja po sieci z użyciem ssh i pliku seed}
-\section{Sieć. ''The Network Is The Computer'' SUN Microsystems' motto}
-\subsection{sshfs i fuse}
-\begin{verbatim}
-# apt-get install sshfs
-# apt-get install fuse
-# usermod -a -G fuse <username> (niepotrzebne w Debian8?)
-# modprobe fuse
-mkdir ~/mountpoint
-sshfs login@10.0.2.186: ~/mountpoint
-\end{verbatim}
-\subsection{Firewall}
-Ponieważ konfiguracja \textit{iptables}, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu \textit{ufw}. \texttt{Uncomplicated Firewall} w pełni zasługuje na swą nazwę. Oto na niego przepis:\footnote{\url{http://www.tecmint.com/how-to-install-and-configure-ufw-firewall/}}
+	\section{Automatyczna instalacja systemu (\texttt{preseeding})}
+	Często w praktyce administratora pewnej liczby komputerów (biuro, pracownia szkolna) zachodzi konieczność reinstalacji na kilku z nich np. wskutek awarii. W praktyce też czas na wykonanie tych operacji jest bardzo ograniczony. Powstała zatem potrzeba zautomatyzowania całego procesu. Jak widzieliśmy proces instalacji sprowadza się do ścisłych odpowiedzi na pytania, które precyzują typ przyszłej maszyny i zakres instalowanego oprogramowania. Można więc stworzyć plik (\texttt{seed}) opisujący te wymagania i podać go instalatorowi do czytania podczas instalacji. Opis metody w dokumentacji Debiana:\footnote{https://www.debian.org/releases/stable/amd64/apbs02.html.en}. Przykładowy plik opisujący:\footnote{https://www.debian.org/releases/stable/amd64/apbs04.html.en}
+	\subsection{Instalacja po sieci z użyciem ssh i pliku seed}
+	\section{Sieć. ''The Network Is The Computer'' SUN Microsystems' motto}
+	\subsection{sshfs i fuse}
+	\begin{verbatim}
+	# apt-get install sshfs
+	# apt-get install fuse
+	# usermod -a -G fuse <username> (niepotrzebne w Debian8?)
+	# modprobe fuse
+	mkdir ~/mountpoint
+	sshfs login@10.0.2.186: ~/mountpoint
+	\end{verbatim}
+	\subsection{Firewall}
+	Ponieważ konfiguracja \textit{iptables}, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu \textit{ufw}. \texttt{Uncomplicated Firewall} w pełni zasługuje na swą nazwę. Oto na niego przepis:\footnote{\url{http://www.tecmint.com/how-to-install-and-configure-ufw-firewall/}}
 
-based on https://help.ubuntu.com/community/Gufw
-and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
-oraz po polsku na: https://webinsider.pl/linux-firewall-ufw/
+	based on https://help.ubuntu.com/community/Gufw
+	and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
+	oraz po polsku na: https://webinsider.pl/linux-firewall-ufw/
 
-Many hacking attempts are successful because users choose weak passwords and leave common ports open and listening.
-Configuration
+	Hakerzy mają ułatwione zadanie gdy użytkownicy używają słabych haseł i pozostawiają popularne porty otwarte i na nasłuchu. Wykoanmy kilka kroków dla poprawienia naszego bezpieczeństwa.
 
-Configuring ufw is almost as simple as installing it. It’s a very intuitive tool.
+\subsubsection{Konfiguracja firewalla ufw\footnote{\url{https://www.tecmint.com/setup-ufw-firewall-on-ubuntu-and-debian/}}}
+Ufw jest domyślnie nieaktywny po instalacji i po pierwsze aktywujemy go poleceniem \textit{ufw enable}
+Pozostanie aktywny także po restarcie.\newline
+Ufw domyślnie nie zamyka żądnych portów. Na początku trzeba zstosować ogólną zasadę bezpieczeństwa polegającą na zamknięciu dostępu do wszystkiego co ie jest nam konieczne:
+Domyślna polityka ufw jest opisana w pliku /etc/default/ufw i może być zmieniona:\newline
+\textbf{ufw default deny incoming}
+\textbf{ufw default allow outgoing}\newline
+ pamiętając jednak o pozostawieniu dostępu do serwera za pomocą ssh regułą:
+\textbf{ufw allow 22/tcp} lub \textbf{ufw allow ssh/tcp}.\newline
 
-Ufw comes disabled by default, so the first thing you want to do is enable it and answer y to the prompt:
+\subsubsubsection{Profile aplikacji ufw}
+W /etc/ufw/applications.d znajdują się profile opisujące ustawienia ufw dla aplikacji. Możemy sprawdzić ich listę:\newline
+\textbf{ufw app list}\newline
+By otrzymać zdefiniowane zasady dla aplikacji, np.:
+\textbf{ufw app info 'OpenSSH'} otrzymałem:\newline
+\textit{22/tcp}\newline
+\subsubsubsection{Definiowanie reguł}
+MOżemy definiować reguły wg. nazwy serwisu, numeru portu lub profilu aplikacji, np.: abyotworzyć port 443 https piszemy:\newline
+\textbf{ufw allow https} lub\newline
+\textbf{ufw allow 443/tcp} lub\newline
+\textbf{ufw allow 'Apache Secure'}.\newline
+\subsubsubsection{Definiowanie zakresu portów}
+Chcąc uruchomić pewne aplikacje w zakresie portów np.:5000-5003 piszemy:
+\textbf{ufw allow 5000:5003/tcp}\newline
+\textbf{ufw allow 5000:5003/udp}\newline
+\subsubsubsection{Definiowanie adresu (adresu i portu)}
+Chcąc zezwolić na połączenie na dowolnych portach z konkretnego adresu 192.168.1.66:
+\textbf{ufw allow from 192.168.1.66} lub z konkretnego adresu na konkretnym porcie:\newline
+\textbf{ufw allow from 192.168.1.66 to any port 22}
+\subsubsubsection{Definiowanie podsieci do portu}
+Aby zezwolić na łączenie z adresów od 192.168.1.1 do 192.168.1.254 na porcie 22 (ssh):
+\textbf{ufw allow from 192.168.1.0/24 to any port 22}
+\subsubsubsection{Definiowanie konkretnego interfejsu sieci}
+Aby zezwolic na połączenie z konkretnym interfejsem sieci eth2 na konkretnym porcie 22:
+\textbf{ufw allow in on eth2 to any port 22}
+\subsubsubsection{Blokowanie połączeń}
+Przypomnijmy, że domyślnie wszystkie przychodzące połączenia są blokowane za wyjątkiem tych celowo otwartych. Dla przykładu: otworzyłeś porty 80 (http) i 443 (https) i twój webserwer został zaatakowany z sieci 11.12.13.0/24. Naturalnie zablokujesz wszystkie przychodzące ztej sieci połączenia:
+\textbf{ufw deny from 11.12.13.0/24} lub blokując tylko otwarte porty:
+\textbf{ufw deny from 11.12.13.0/24 to any port 80} 
+\textbf{ufw deny from 11.12.13.0/24 to any port 443} 
+\subsubsubsection{Usuwanie definicji ufw}
+Definicje można usuwać wg. numeru definicji lub wybranej definicji. Aby poznać numer definicji:
+\textbf{ufw status numbered)\newline
+i by usunąc np. drugą definicję:
+\textbf{ufw delete 2}\newline
+Aby usunąć wybraną definicję: 
+\textbf{ufw delete allow 22/tcp}\newline
+\subsubsubsection{Testowanie definicji ufw}
+W obawie o skutki działań możemy wypróbować dzięki oopcji \textbf{--dry-run} co się stanie po wykonaniu nowej definicji:
+\textbf{ufw delete allow 22/tcp}\newline
 
-$ ufw enable
-Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
-Firewall is active and enabled on system startup
 
-Alright, now it’s enabled and will be executed upon server startup as well. This way, even if you reboot your Webby, ufw will continue to run.
-Denying connections by default
 
-When installed, ufw acts very unobtrusively: it won’t close access to any ports. However, in order to really secure our system, we should take the inverse approach. This approach is deny any connections, except the ones we explicitly find we need.
-
-Before changing the default ufw operation mode, let’s make sure we allow connections to the ssh port we’re connected to:
-
-$ ufw allow 22
-Rule added
+\subsubsection{Ogólne zasady konfiguracji firewalla w 5 krokach\footnote{\url{https://www.securitymetrics.com/blog/how-configure-firewall-5-steps}}}.
+Jeśli atakujący może uzyskać administracyjny dostęp do firewalla oznacza to koniec gry. Zatem jego ochrona to pierwszy i najważniejszy krok ku bezpieczeństwu. Nigdy nie pracuj zanim nie zabezpieczysz sie poprawnie przez co najmniej:
+\subsubsubsection{krok 1}
+\begin enumerate
+\item {aktualizację;}
+\item {usunięcie, zablokowanie, zmianę nazwy każdego domyślnego konta uzytkownika i zminę domyślnych haseł; używaj wyłącznie złożonycj i bezpiecznych haseł;}
+\item {jeśli administracja firewallem jest dzielona przez kilku adminów, twórz oddzielne konta administracyjne z prawami ograniczonymi przez obowiązki; nigdy nie używaj współdzelonego konta;}
+\item {zablokuj simple network management protocol SNTP lub zabezpiecz go}
+\end enumerate
+\subsubsubsection{krok 2}
+\begin enumerate
+\item {opisz chronione obszary i ustal w nich numerację IP bazując na podobnym poziomie wrażliwości i funkcjonalności;}
+\end enumerate
+\subsubsubsection{krok 3}
+\begiin enumerate
+\item {Skonfiguruj dostęp ACL}
+Ruch jest określony za pomocą zasad (ACL) stosowanych dokażdego interfejsu firewalla. Określ adresy IP źródłowe i docelowe i adresy portów gdy to możliwe. Na końcu każdej ACL-użyj zawsze ..deny all'' by odfiltrować zbędny ruch. Zaleca się unimożliwić zarządznie zarówno po ssh jak i web ze świata. Koniecznie wyłącz każdy nieszyfrowany protokół dla zarządzania np. telnet i http.
+\end enumerate
+\subsubsubsection{krok 4}
+\begin enumerate
+\item {testowanie}
+Powinno skłądać się z testów zagrożeń i penetracyjnych
+\end enumerate
+\subsubsubsection{krok 4}
+\begin enumerate
+\item {zarządzanie}
+Aktualizacja, przeglądanie logów, skanowanie zagrożeń, ocena zasad ACL firewalla co min. pół roku.
+\end enumerate
+KOniecznie dokumentuj każdy swój krok.
 
 \subsection{Skanowanie portów}
 \subsubsection{Netcat}
