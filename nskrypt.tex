@@ -327,6 +327,21 @@ Można różnym typom użytkowników przyporządkować oddzielne ""szkielety"". 
 a)utwórz trzy nowe konta metodą useradd dla trzech typów pracowników: biuro, zarząd, księgowy; dla każdego typu przygotuj inny szkielet (etc/skel);
 
 b)opracuj to zadanie w formie skryptu.
+\subsection{chage}
+Jak pisze autor portalu \textbf{tecmint} \footnote{\url{https://www.tecmint.com/manage-user-password-expiration-and-aging-in-linux/}} polecenie \textbf{chage} jest jednym z ważniejszych w zarządzniu użytkownikami. Często w zadaniach egzaminacyjnych mamy polecenia w rodzaju: ustaw czas życia konta, czas życia hasła.
+\subsubsection{przykłady zastosowania chage}
+Odczyt aktualnych info o użytkowniku:
+begin{verbatim}
+chage -l student
+man chage
+end{verbatim}
+zaś dobrze opisuje pozostałe opcje.
+\subsubsection{godziny logowania}
+W 64-bit wersji useradd jest możliwość dodania rozszerzonych opcji (-x extented attributes) i tak:
+begin{verbatim}
+useradd normal options -x logon_hours=Wk0800-1600 romek
+end{verbatim}
+Romek będzie się logował tylko w godzinach pracy.
 \subsection{Wyszukiwanie: polecenie \textbf{find}}
 \footnote{\url{http://www.linux.net.pl/~wkotwica/doc/find/find_toc.html#TOC45}}
 Moc find
@@ -934,12 +949,16 @@ cat spreadsheet\_test\_answer \textbar sort -R \textbar pr -T4 -W$COLUMNS
 \subsubsection{Konfiguracja firewalla ufw\footnote{\url{https://www.tecmint.com/setup-ufw-firewall-on-ubuntu-and-debian/}}}
 Ufw jest domyślnie nieaktywny po instalacji i po pierwsze aktywujemy go poleceniem \textit{ufw enable}
 Pozostanie aktywny także po restarcie.\newline
-Ufw domyślnie nie zamyka żądnych portów. Na początku trzeba zstosować ogólną zasadę bezpieczeństwa polegającą na zamknięciu dostępu do wszystkiego co ie jest nam konieczne:
-Domyślna polityka ufw jest opisana w pliku /etc/default/ufw i może być zmieniona:\newline
+Ufw domyślnie nie zamyka żadnych portów. Na początku trzeba zstosować ogólną zasadę bezpieczeństwa polegającą na zamknięciu dostępu do wszystkiego co ie jest nam konieczne:
+Domyślna polityka ufw jest opisana w pliku /etc/default/ufw i może być zmieniona z linii poleceń:\newline
 \textbf{ufw default deny incoming}
 \textbf{ufw default allow outgoing}\newline
  pamiętając jednak o pozostawieniu dostępu do serwera za pomocą ssh regułą:
 \textbf{ufw allow 22/tcp} lub \textbf{ufw allow ssh/tcp}.\newline
+bez czego możemy zostać odcięci od konfigurowanego serwera. Po zmianie ustawień sprawdzamy:
+\textbf{ufw status}\newline
+jeśli ok:
+\textbf{ufw reload}
 
 \subsubsubsection{Profile aplikacji ufw}
 W /etc/ufw/applications.d znajdują się profile opisujące ustawienia ufw dla aplikacji. Możemy sprawdzić ich listę:\newline
@@ -1258,6 +1277,15 @@ Otwieramy port na Firewall:
 
 
 \section{VirtualBox}
+\subsection{Przygotowanie do pracy SOUbuntu do pracy w VB}
+W celu przećwiczenia zadań egzaminacyjnych z przedmiotu pracownia PSO i PSK b edziemy wykorzystywać SO Ubuntu uruchamiany w maszynie wirtualnej VB. Wybór VB zamiast Qemu jest podyktowany znajomością tej maszyny wśród uczniów i łatwością konfiguracji.\newline
+\subsection{Instalacja VB na hoście}
+Instalacja w Debianie opisana jest np. tutaj: \url{https://vitux.com/how-to-install-virtualbox-on-debian-10}.\newline
+\subsection{Podbranie wzorcowego SOUbuntu}
+Gotowe do ćwiczenia wzorce (wielu dystybucji Linuxa) można pobrać z \url{https://osboxes.org}. Z obrazów dla VB wybieramy odnośnik do Ubuntu wersji 18. Będzie to wersja językowa British English. Nie jest to dla nas problemem, choć warto pamiętać, że egzamin będzie odbywał się w wersji polskiej. Na ściągnięcie pliku trzeba dużo czasu. Będzie on w formacie *.7z, do którego trzeba zainstalować p7zip. Po rozpakowaniu (\footnote{w razie kłopotów:\url{https://www.simplified.guide/linux/extract-7z-file}} macie gotowy, wstępnie skonfigurowany SOUbuntu z domyślnym użytkownikiem ,,osboxes'' i hasłem ,,osboxes.org''. W tym obrazie SO obowiązuje dla ,,root'' to samo hasło ,,osboxes.org''. Pozostaje obraz ten zaimportować do VB i już można ćwiczyć i ćwiczyć!
+\begin{verbatim}
+
+\end{verbatim}
 \subsection{Klonowanie uprzednio uruchomionych systemów komputerowych (SK) pomiędzy kolejnymi hostami (pracownia komputerowa)}
 W Oracle VirtualBox isnieje pojęcie \textit{appliance} oznaczające gotowy, działający SK, który możemy rozmnożyć. W tym celu polecamy: \textbf{Export Appliance}. Maszyna musi być wyłączona lub zapisana (saved). VB ślicznie zapisuje nam SK w jednym pliku \textbf{*.ova}. Plik ten kopiujemy na server, z którego rozmnażamy tyle SK ile dusza zapragnie. Uruchamiamy uprzednio importując poleceniem \textbf{Import Appliance} i ... błąd (wstaw foto). Oczywiście w dokumentacji nic nie znajdujemy :)\newline
 Jak można się zorientować, błąd dotyczy nowego (innego) idetyfikatora \textit{uuid} jaki posiada sklonowany SK w nowym (innym) VB na nowym (innym) hoście. Jeśli zmienimy \textit{uuid} na oryginalny -- sklonowany SK powinien się podnosić.
@@ -1363,5 +1391,5 @@ p/4417/fd/0r /home/jw/bigfile 115MB/s (16%, 3.2GB)  8m:01
 \end{verbatim}
 
 
-
+-----------
 \end{document}
