@@ -1,0 +1,24 @@
+based on https://help.ubuntu.com/community/Gufw
+and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
+oraz na: https://webinsider.pl/linux-firewall-ufw/
+
+Many hacking attempts are successful because users choose weak passwords and leave common ports open and listening.
+Configuration
+
+Configuring ufw is almost as simple as installing it. It’s a very intuitive tool.
+
+Ufw comes disabled by default, so the first thing you want to do is enable it and answer y to the prompt:
+
+$ ufw enable
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+
+Alright, now it’s enabled and will be executed upon server startup as well. This way, even if you reboot your Webby, ufw will continue to run.
+Denying connections by default
+
+When installed, ufw acts very unobtrusively: it won’t close access to any ports. However, in order to really secure our system, we should take the inverse approach. This approach is deny any connections, except the ones we explicitly find we need.
+
+Before changing the default ufw operation mode, let’s make sure we allow connections to the ssh port we’re connected to:
+
+$ ufw allow 22
+Rule added

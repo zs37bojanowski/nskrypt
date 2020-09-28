@@ -1,0 +1,36 @@
+%% -*- coding: utf-8 -*-
+\documentclass[a4paper,titlepage,12pt]{mwart}
+\setlength{\textheight}{22cm}
+\setlength{\textwidth}{18cm}
+\setlength{\oddsidemargin}{0.1cm}
+\setlength{\evensidemargin}{0.1cm}
+\usepackage[english,polish]{babel}
+\usepackage[OT1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage{iwona}
+\usepackage{polski}
+\frenchspacing
+\usepackage{indentfirst}
+\title{\textsc{\huge{NSkrypt PSO/PSK/PLSK firewall ufw}}}
+\author{Adam Bojanowski}
+\date{5 kwietnia 2020}
+%\selectlanguage{english}
+\usepackage[polish]{babel}
+%\usepackage[OT4]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage{iwona}
+%\usepackage{polski}
+%\usepackage{hyperref}
+\usepackage{paralist}
+\pagestyle{headings}%{empty}
+\usepackage[breaklinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{moreverb}
+\usepackage{enumitem}
+\AtBeginDocument{\let\textlabel\label}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\begin{document}
+\graphicspath{ {/home/navegante/SLES/} }
+%\textbf{biblia:}
+%\url{http://tldp.org/LDP/intro-linux/html/}\newline
+%\url{http://www.tldp.org/LDP/Bash-Beginners-Guide/html/Bash-Beginners-Guide.html}

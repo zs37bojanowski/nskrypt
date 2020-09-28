@@ -1,0 +1,87 @@
+
+
+NSkrypt PSO/PSK/PLSK firewall ufw
+Adam Bojanowski
+5 kwietnia 2020
+
+
+
+
+
+
+
+
+.pdf,.png,.jpg
+ /home/navegante/SLES/ 
+
+
+
+Firewall
+	Ponieważ konfiguracja iptables, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu ufw. Uncomplicated Firewall w pełni zasługuje na swą nazwę. Oto na niego przepis:(http://www.tecmint.com/how-to-install-and-configuufwre-ufw-firewall/)
+
+	based on https://help.ubuntu.com/community/Gufw
+	and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
+	oraz po polsku na: https://webinsider.pl/linux-firewall-ufw/
+
+	Hakerzy mają ułatwione zadanie gdy użytkownicy używają słabych haseł i pozostawiają popularne porty otwarte i na nasłuchu. Wykoanmy kilka kroków dla poprawienia naszego bezpieczeństwa.
+
+Konfiguracja firewalla ufw(https://www.tecmint.com/setup-ufw-firewall-on-ubuntu-and-debian/)
+Ufw jest domyślnie nieaktywny po instalacji i po pierwsze aktywujemy go poleceniem ufw enable
+Pozostanie aktywny także po restarcie.Ufw domyślnie nie zamyka żądnych portów. Na początku trzeba zstosować ogólną zasadę bezpieczeństwa polegającą na zamknięciu dostępu do wszystkiego co ie jest nam konieczne:
+Domyślna polityka ufw jest opisana w pliku /etc/default/ufw i może być zmieniona:ufw default deny incoming
+ufw default allow outgoing pamiętając jednak o pozostawieniu dostępu do serwera za pomocą ssh regułą:
+ufw allow 22/tcp lub ufw allow ssh/tcp.
+Profile aplikacji ufw
+W /etc/ufw/applications.d znajdują się profile opisujące ustawienia ufw dla aplikacji. Możemy sprawdzić ich listę:ufw app listBy otrzymać zdefiniowane zasady dla aplikacji, np.:
+ufw app info 'OpenSSH' otrzymałem:22/tcpDefiniowanie reguł
+MOżemy definiować reguły wg. nazwy serwisu, numeru portu lub profilu aplikacji, np.: abyotworzyć port 443 https piszemy:ufw allow https lubufw allow 443/tcp lubufw allow 'Apache Secure'.Definiowanie zakresu portów
+Chcąc uruchomić pewne aplikacje w zakresie portów np.:5000-5003 piszemy:
+ufw allow 5000:5003/tcpufw allow 5000:5003/udpDefiniowanie adresu (adresu i portu)
+Chcąc zezwolić na połączenie na dowolnych portach z konkretnego adresu 192.168.1.66:
+ufw allow from 192.168.1.66 lub z konkretnego adresu na konkretnym porcie:ufw allow from 192.168.1.66 to any port 22
+Definiowanie podsieci do portu
+Aby zezwolić na łączenie z adresów od 192.168.1.1 do 192.168.1.254 na porcie 22 (ssh):
+ufw allow from 192.168.1.0/24 to any port 22
+Definiowanie konkretnego interfejsu sieci
+Aby zezwolic na połączenie z konkretnym interfejsem sieci eth2 na konkretnym porcie 22:
+ufw allow in on eth2 to any port 22
+Blokowanie połączeń
+Przypomnijmy, że domyślnie wszystkie przychodzące połączenia są blokowane za wyjątkiem tych celowo otwartych. Dla przykładu: otworzyłeś porty 80 (http) i 443 (https) i twój webserwer został zaatakowany z sieci 11.12.13.0/24. Naturalnie zablokujesz wszystkie przychodzące ztej sieci połączenia:
+ufw deny from 11.12.13.0/24 lub blokując tylko otwarte porty:
+ufw deny from 11.12.13.0/24 to any port 80 
+ufw deny from 11.12.13.0/24 to any port 443 
+Usuwanie definicji ufw
+Definicje można usuwać wg. numeru definicji lub wybranej definicji. Aby poznać numer definicji:
+ufw status numbered)i by usunąc np. drugą definicję:
+ufw delete 2Aby usunąć wybraną definicję: 
+ufw delete allow 22/tcpTestowanie definicji ufw
+W obawie o skutki działań możemy wypróbować dzięki oopcji -dry-run co się stanie po wykonaniu nowej definicji:
+ufw delete allow 22/tcp
+
+
+Ogólne zasady konfiguracji firewalla w 5 krokach(https://www.securitymetrics.com/blog/how-configure-firewall-5-steps).
+Jeśli atakujący może uzyskać administracyjny dostęp do firewalla oznacza to koniec gry. Zatem jego ochrona to pierwszy i najważniejszy krok ku bezpieczeństwu. Nigdy nie pracuj zanim nie zabezpieczysz sie poprawnie przez co najmniej:
+krok 1
+
+aktualizację;
+usunięcie, zablokowanie, zmianę nazwy każdego domyślnego konta uzytkownika i zminę domyślnych haseł; używaj wyłącznie złożonycj i bezpiecznych haseł;
+jeśli administracja firewallem jest dzielona przez kilku adminów, twórz oddzielne konta administracyjne z prawami ograniczonymi przez obowiązki; nigdy nie używaj współdzelonego konta;
+zablokuj simple network management protocol SNTP lub zabezpiecz go
+
+
+opisz chronione obszary i ustal w nich numerację IP bazując na podobnym poziomie wrażliwości i funkcjonalności;
+
+enumerate
+Skonfiguruj dostęp ACL
+Ruch jest określony za pomocą zasad (ACL) stosowanych dokażdego interfejsu firewalla. Określ adresy IP źródłowe i docelowe i adresy portów gdy to możliwe. Na końcu każdej ACL-użyj zawsze ..deny all" by odfiltrować zbędny ruch. Zaleca się unimożliwić zarządznie zarówno po ssh jak i web ze świata. Koniecznie wyłącz każdy nieszyfrowany protokół dla zarządzania np. telnet i http.
+
+
+testowanie
+Powinno skłądać się z testów zagrożeń i penetracyjnych
+
+
+zarządzanie
+Aktualizacja, przeglądanie logów, skanowanie zagrożeń, ocena zasad ACL firewalla co min. pół roku.
+
+
+

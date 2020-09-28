@@ -1,0 +1,93 @@
+\subsection{Firewall}
+	Ponieważ konfiguracja \textit{iptables}, który jest standardowym firewallem w Linuxie, jest trudna, skorzystamy z programu \textit{ufw}. \texttt{Uncomplicated Firewall} w pełni zasługuje na swą nazwę. Oto na niego przepis:\footnote{\url{http://www.tecmint.com/how-to-install-and-configuufwre-ufw-firewall/}}
+
+	based on https://help.ubuntu.com/community/Gufw
+	and on http://guides.webbynode.com/articles/security/ubuntu-ufw.html
+	oraz po polsku na: https://webinsider.pl/linux-firewall-ufw/
+
+	Hakerzy mają ułatwione zadanie gdy użytkownicy używają słabych haseł i pozostawiają popularne porty otwarte i na nasłuchu. Wykoanmy kilka kroków dla poprawienia naszego bezpieczeństwa.
+
+\subsubsection{Konfiguracja firewalla ufw\footnote{\url{https://www.tecmint.com/setup-ufw-firewall-on-ubuntu-and-debian/}}}
+Ufw jest domyślnie nieaktywny po instalacji i po pierwsze aktywujemy go poleceniem \textit{ufw enable}
+Pozostanie aktywny także po restarcie.\newline
+Ufw domyślnie nie zamyka żądnych portów. Na początku trzeba zstosować ogólną zasadę bezpieczeństwa polegającą na zamknięciu dostępu do wszystkiego co ie jest nam konieczne:
+Domyślna polityka ufw jest opisana w pliku /etc/default/ufw i może być zmieniona:\newline
+\textbf{ufw default deny incoming}
+\textbf{ufw default allow outgoing}\newline
+ pamiętając jednak o pozostawieniu dostępu do serwera za pomocą ssh regułą:
+\textbf{ufw allow 22/tcp} lub \textbf{ufw allow ssh/tcp}.\newline
+
+\subsubsubsection{Profile aplikacji ufw}
+W /etc/ufw/applications.d znajdują się profile opisujące ustawienia ufw dla aplikacji. Możemy sprawdzić ich listę:\newline
+\textbf{ufw app list}\newline
+By otrzymać zdefiniowane zasady dla aplikacji, np.:
+\textbf{ufw app info 'OpenSSH'} otrzymałem:\newline
+\textit{22/tcp}\newline
+\subsubsubsection{Definiowanie reguł}
+MOżemy definiować reguły wg. nazwy serwisu, numeru portu lub profilu aplikacji, np.: abyotworzyć port 443 https piszemy:\newline
+\textbf{ufw allow https} lub\newline
+\textbf{ufw allow 443/tcp} lub\newline
+\textbf{ufw allow 'Apache Secure'}.\newline
+\subsubsubsection{Definiowanie zakresu portów}
+Chcąc uruchomić pewne aplikacje w zakresie portów np.:5000-5003 piszemy:
+\textbf{ufw allow 5000:5003/tcp}\newline
+\textbf{ufw allow 5000:5003/udp}\newline
+\subsubsubsection{Definiowanie adresu (adresu i portu)}
+Chcąc zezwolić na połączenie na dowolnych portach z konkretnego adresu 192.168.1.66:
+\textbf{ufw allow from 192.168.1.66} lub z konkretnego adresu na konkretnym porcie:\newline
+\textbf{ufw allow from 192.168.1.66 to any port 22}
+\subsubsubsection{Definiowanie podsieci do portu}
+Aby zezwolić na łączenie z adresów od 192.168.1.1 do 192.168.1.254 na porcie 22 (ssh):
+\textbf{ufw allow from 192.168.1.0/24 to any port 22}
+\subsubsubsection{Definiowanie konkretnego interfejsu sieci}
+Aby zezwolic na połączenie z konkretnym interfejsem sieci eth2 na konkretnym porcie 22:
+\textbf{ufw allow in on eth2 to any port 22}
+\subsubsubsection{Blokowanie połączeń}
+Przypomnijmy, że domyślnie wszystkie przychodzące połączenia są blokowane za wyjątkiem tych celowo otwartych. Dla przykładu: otworzyłeś porty 80 (http) i 443 (https) i twój webserwer został zaatakowany z sieci 11.12.13.0/24. Naturalnie zablokujesz wszystkie przychodzące ztej sieci połączenia:
+\textbf{ufw deny from 11.12.13.0/24} lub blokując tylko otwarte porty:
+\textbf{ufw deny from 11.12.13.0/24 to any port 80} 
+\textbf{ufw deny from 11.12.13.0/24 to any port 443} 
+\subsubsubsection{Usuwanie definicji ufw}
+Definicje można usuwać wg. numeru definicji lub wybranej definicji. Aby poznać numer definicji:
+\textbf{ufw status numbered)\newline
+i by usunąc np. drugą definicję:
+\textbf{ufw delete 2}\newline
+Aby usunąć wybraną definicję: 
+\textbf{ufw delete allow 22/tcp}\newline
+\subsubsubsection{Testowanie definicji ufw}
+W obawie o skutki działań możemy wypróbować dzięki oopcji \textbf{--dry-run} co się stanie po wykonaniu nowej definicji:
+\textbf{ufw delete allow 22/tcp}\newline
+
+
+
+\subsubsection{Ogólne zasady konfiguracji firewalla w 5 krokach\footnote{\url{https://www.securitymetrics.com/blog/how-configure-firewall-5-steps}}}.
+Jeśli atakujący może uzyskać administracyjny dostęp do firewalla oznacza to koniec gry. Zatem jego ochrona to pierwszy i najważniejszy krok ku bezpieczeństwu. Nigdy nie pracuj zanim nie zabezpieczysz sie poprawnie przez co najmniej:
+\subsubsubsection{krok 1}
+\begin enumerate
+\item {aktualizację;}
+\item {usunięcie, zablokowanie, zmianę nazwy każdego domyślnego konta uzytkownika i zminę domyślnych haseł; używaj wyłącznie złożonycj i bezpiecznych haseł;}
+\item {jeśli administracja firewallem jest dzielona przez kilku adminów, twórz oddzielne konta administracyjne z prawami ograniczonymi przez obowiązki; nigdy nie używaj współdzelonego konta;}
+\item {zablokuj simple network management protocol SNTP lub zabezpiecz go}
+\end enumerate
+\subsubsubsection{krok 2}
+\begin enumerate
+\item {opisz chronione obszary i ustal w nich numerację IP bazując na podobnym poziomie wrażliwości i funkcjonalności;}
+\end enumerate
+\subsubsubsection{krok 3}
+\begiin enumerate
+\item {Skonfiguruj dostęp ACL}
+Ruch jest określony za pomocą zasad (ACL) stosowanych dokażdego interfejsu firewalla. Określ adresy IP źródłowe i docelowe i adresy portów gdy to możliwe. Na końcu każdej ACL-użyj zawsze ..deny all'' by odfiltrować zbędny ruch. Zaleca się unimożliwić zarządznie zarówno po ssh jak i web ze świata. Koniecznie wyłącz każdy nieszyfrowany protokół dla zarządzania np. telnet i http.
+\end enumerate
+\subsubsubsection{krok 4}
+\begin enumerate
+\item {testowanie}
+Powinno skłądać się z testów zagrożeń i penetracyjnych
+\end enumerate
+\subsubsubsection{krok 4}
+\begin enumerate
+\item {zarządzanie}
+Aktualizacja, przeglądanie logów, skanowanie zagrożeń, ocena zasad ACL firewalla co min. pół roku.
+\end enumerate
+KOniecznie dokumentuj każdy swój krok.
+
+\end{document}

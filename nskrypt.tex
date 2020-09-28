@@ -1389,7 +1389,22 @@ p/4417/fd/1w /tmp/otherbigfile 182MB/s (2.6GB)
 p/4417/fd/0r /home/jw/bigfile 285MB/s (15%, 3.0GB)  8m:08
 p/4417/fd/0r /home/jw/bigfile 115MB/s (16%, 3.2GB)  8m:01
 \end{verbatim}
-
+\subsection{Wirtualizacja}
+\subsubsection{Instalacja virt-managera}
+\begin{verbatim}
+  502  usermod --append --groups libvirt libvirt-qemu adam
+  503  usermod --append --groups libvirt adam
+  504  usermod --append --groups libvirt-qemu adam
+  505  groups adam
+  506  service qemu-guest status
+  507  apt-get update
+  508  apt-get install qemu-guest agent
+  509  apt-get install qemu-guest-agent
+  510  service qemu-guest status
+  511  service qemu-guest-agent status
+  512  history|tail
+  513  history|tail -n12 > ~adam/histag && chown adam: histag
+\end{verbatim}
 
 -----------
 \end{document}
