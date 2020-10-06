@@ -1418,10 +1418,32 @@ p/4417/fd/0r /home/jw/bigfile 115MB/s (16%, 3.2GB)  8m:01
 
 
 \begin{enumerate}
-\item{pierwszy}
-\item{drugi}
-\item{trzeci}
+\item{Informacje wstępne o DNS typu autorytatywnego}
+DNS tego typu odpowiada jedynie za własną strefę; nie obsługuje (recursive queries); jest szybki; nie przechowuje zapytań innych serwerów; nie przekazuje zapytań.\newline
+Dla potrzeb ćwiczenia skonfigurujemy tylko jeden (!) główny serwer dla naszej strefy. Skonfigurujemy także możliwość łączenia się klientów z serwerem www.
 
+\item{Konfiguracja}
+Na maszynie przeznaczonej do roli DNS edytujemy \/etc\/hosts:\newline
+begin{verbatim}
+sudo nano /etc/hosts
+127.0.0.1	localhost
+192.168.1.62	dns.p58 dns
+
+sudo nano /etc/hosts
+wpisujemy nazwę naszego dns'a
+dns
+wymuszamy wczytanie zmian w pliku hostname:
+sudo hostname -F /etc/hostname
+end{verbatim}
+ <=mapujemy adres ip z pełną nazwą:
+
+\item{Instalacja programu NSD}
+Po instalacji NSD serwis powinien działać jako użytkownik nsd. Niestety instalator nie zakłada takiego użytkownika i aby uniknąć błędów podczas uruchamiania trzeba przed instalacją NSD ręcznie dodać użytkownika nsd: 
+\begin{verbatim}
+sudo useradd -r nsd
+sudo apt-get update
+sudo apt-get install nsd
+ \end{verbatim}.
 \end{enumerate}
 
 \end{enumerate}
